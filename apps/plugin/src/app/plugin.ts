@@ -88,16 +88,6 @@ export class ReplicatePlugin extends Plugin {
         needToSaveSettings = true;
       }
 
-      if (loadedSettings.disableSafetyChecker) {
-        draft.disableSafetyChecker = loadedSettings.disableSafetyChecker;
-      } else {
-        log(
-          'The loaded settings miss the [disableSafetyChecker] property',
-          'debug'
-        );
-        needToSaveSettings = true;
-      }
-
       if (loadedSettings.imageGenerationModel) {
         draft.imageGenerationModel = loadedSettings.imageGenerationModel;
       } else {
@@ -119,42 +109,11 @@ export class ReplicatePlugin extends Plugin {
         needToSaveSettings = true;
       }
 
-      if (loadedSettings.numberOfImagesToGenerate) {
-        draft.numberOfImagesToGenerate =
-          loadedSettings.numberOfImagesToGenerate;
+      if (loadedSettings.imageGenerationConfiguration) {
+        draft.imageGenerationConfiguration = loadedSettings.imageGenerationConfiguration;
       } else {
         log(
-          'The loaded settings miss the [numberOfImagesToGenerate] property',
-          'debug'
-        );
-        needToSaveSettings = true;
-      }
-
-      if (loadedSettings.imagesAspectRatio) {
-        draft.imagesAspectRatio = loadedSettings.imagesAspectRatio;
-      } else {
-        log(
-          'The loaded settings miss the [imagesAspectRatio] property',
-          'debug'
-        );
-        needToSaveSettings = true;
-      }
-
-      if (loadedSettings.imagesOutputFormat) {
-        draft.imagesOutputFormat = loadedSettings.imagesOutputFormat;
-      } else {
-        log(
-          'The loaded settings miss the [imagesOutputFormat] property',
-          'debug'
-        );
-        needToSaveSettings = true;
-      }
-
-      if (loadedSettings.imagesOutputQuality) {
-        draft.imagesOutputQuality = loadedSettings.imagesOutputQuality;
-      } else {
-        log(
-          'The loaded settings miss the [imagesOutputQuality] property',
+          'The loaded settings miss the [imageGenerationConfiguration] property',
           'debug'
         );
         needToSaveSettings = true;

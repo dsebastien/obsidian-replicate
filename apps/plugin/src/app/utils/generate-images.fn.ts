@@ -1,4 +1,3 @@
-import Replicate from 'replicate';
 import {PluginSettings} from '../types/plugin-settings.intf';
 import {log} from './log';
 import {Notice} from "obsidian";
@@ -10,10 +9,11 @@ import {
 } from "../constants";
 import {isApiKeyConfigured} from "./is-api-key-configured.fn";
 import {isImageGenerationModelConfigured} from "./is-image-generation-model-configured.fn";
-
+import {ReplicateCreatePrediction} from "./replicate-create-prediction-input.intf";
+import {getReplicateClient} from "./get-replicate-client.fn";
 
 export const generateImages = async (
-  prompt: string,
+  prompt: string | undefined,
   settings: PluginSettings
 ): Promise<void> => {
   if (!isApiKeyConfigured(settings)) {
@@ -28,33 +28,28 @@ export const generateImages = async (
     return;
   }
 
-  log('Creating Replicate.com API client', 'debug');
-  const replicate = new Replicate({
-    auth: settings.apiKey,
-  });
-
+  const replicate = getReplicateClient(settings.apiKey);
 
   log('Generating images for prompt: ', 'debug', prompt);
   new Notice(`Generating image(s) for with following prompt: [${prompt}] using the following model [${settings.imageGenerationModel}]`, NOTICE_TIMEOUT);
 
-  log('Sending image generation request to Replicate.com', 'debug');
   try {
-    let predictionResult = await replicate.predictions.create({
-      model: this.settings.imageGenerationModel,
-      version: this.settings.imageGenerationModel.version,
-
+    const replicateCreatePredictionConfiguration: ReplicateCreatePrediction = {
+      model: settings.imageGenerationModel,
       // Model configuration
       input: {
-        prompt: prompt,
-        num_outputs: this.settings.numberOfImagesToGenerate,
-        aspect_ratio: this.settings.imagesAspectRatio,
-        output_format: this.settings.imagesOutputFormat,
-        output_quality: this.settings.imagesOutputQuality,
-        //guidance: 3.5
-        //prompt_strength: 0.8,
-        //num_inference_steps: 50
+        ...settings.imageGenerationConfiguration,
+        prompt, // FIXME ensure that the prompt is the one we expect in the request
       },
-    });
+    }
+
+    if(settings.imageGenerationModelVersion && "" !== settings.imageGenerationModelVersion!.trim()) {
+      replicateCreatePredictionConfiguration.version = settings.imageGenerationModelVersion!;
+    }
+
+    log('Sending image generation request to Replicate.com', 'debug', replicateCreatePredictionConfiguration);
+
+    let predictionResult = await replicate.predictions.create(replicateCreatePredictionConfiguration);
 
     if (predictionResult.error) {
       log("Error received from Replicate.com", 'warn', predictionResult.error);

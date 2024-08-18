@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "immer": "10.0.4",
+    "node-fetch": "3.3.2",
     "obsidian": "latest",
     "replicate": "0.32.0",
     "tslib": "2.4.0",
