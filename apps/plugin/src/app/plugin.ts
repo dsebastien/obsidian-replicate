@@ -1,8 +1,15 @@
-import { Plugin } from 'obsidian';
+import { Notice, Plugin } from 'obsidian';
 import { DEFAULT_SETTINGS, PluginSettings } from './types/plugin-settings.intf';
 import { SettingsTab } from './settingTab';
 import { log } from './utils/log';
 import { Draft, produce } from 'immer';
+import {
+  MSG_API_KEY_CONFIGURATION_REQUIRED,
+  NOTICE_TIMEOUT,
+} from './constants';
+import { generateImages } from './utils/generate-images.fn';
+import { PromptModal } from './modals/prompt-modal';
+import {isApiKeyConfigured} from "./utils/is-api-key-configured.fn";
 
 export class ReplicatePlugin extends Plugin {
   /**
@@ -17,10 +24,32 @@ export class ReplicatePlugin extends Plugin {
     log('Initializing', 'debug');
     await this.loadSettings();
 
-    // TODO
-
     // Add a settings screen for the plugin
     this.addSettingTab(new SettingsTab(this.app, this));
+
+    if (!isApiKeyConfigured(this.settings)) {
+      new Notice(MSG_API_KEY_CONFIGURATION_REQUIRED, NOTICE_TIMEOUT);
+    }
+
+    // Add commands
+    this.addCommand({
+      id: 'generate-image-using-replicate',
+      name: 'Generate image(s) using Replicate.com',
+      callback: async () => {
+        log('Generating image(s) using Replicate.com', 'debug');
+
+        // Don't allow generating if the API key is not set
+        if (!isApiKeyConfigured(this.settings)) {
+          new Notice(MSG_API_KEY_CONFIGURATION_REQUIRED, NOTICE_TIMEOUT);
+          return;
+        }
+
+        new PromptModal(this.app, async (prompt) => {
+          new Notice(`Prompt: ${prompt}`);
+          await generateImages(prompt, this.settings);
+        }).open();
+      },
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -42,10 +71,92 @@ export class ReplicatePlugin extends Plugin {
     let needToSaveSettings = false;
 
     this.settings = produce(this.settings, (draft: Draft<PluginSettings>) => {
-      if (loadedSettings.enabled) {
-        draft.enabled = loadedSettings.enabled;
+      if (loadedSettings.apiKey) {
+        draft.apiKey = loadedSettings.apiKey;
       } else {
-        log('The loaded settings miss the [enabled] property', 'debug');
+        log('The loaded settings miss the [apiKey] property', 'debug');
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.copyOutputToClipboard) {
+        draft.copyOutputToClipboard = loadedSettings.copyOutputToClipboard;
+      } else {
+        log(
+          'The loaded settings miss the [copyOutputToClipboard] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.disableSafetyChecker) {
+        draft.disableSafetyChecker = loadedSettings.disableSafetyChecker;
+      } else {
+        log(
+          'The loaded settings miss the [disableSafetyChecker] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.imageGenerationModel) {
+        draft.imageGenerationModel = loadedSettings.imageGenerationModel;
+      } else {
+        log(
+          'The loaded settings miss the [imageGenerationModel] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.imageGenerationModelVersion) {
+        draft.imageGenerationModelVersion =
+          loadedSettings.imageGenerationModelVersion;
+      } else {
+        log(
+          'The loaded settings miss the [imageGenerationModelVersion] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.numberOfImagesToGenerate) {
+        draft.numberOfImagesToGenerate =
+          loadedSettings.numberOfImagesToGenerate;
+      } else {
+        log(
+          'The loaded settings miss the [numberOfImagesToGenerate] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.imagesAspectRatio) {
+        draft.imagesAspectRatio = loadedSettings.imagesAspectRatio;
+      } else {
+        log(
+          'The loaded settings miss the [imagesAspectRatio] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.imagesOutputFormat) {
+        draft.imagesOutputFormat = loadedSettings.imagesOutputFormat;
+      } else {
+        log(
+          'The loaded settings miss the [imagesOutputFormat] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.imagesOutputQuality) {
+        draft.imagesOutputQuality = loadedSettings.imagesOutputQuality;
+      } else {
+        log(
+          'The loaded settings miss the [imagesOutputQuality] property',
+          'debug'
+        );
         needToSaveSettings = true;
       }
     });
