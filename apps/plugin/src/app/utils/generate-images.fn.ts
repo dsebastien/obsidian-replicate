@@ -110,14 +110,48 @@ export const generateImages = async (
         return;
       }
 
+      if (predictionResult.error) {
+        log(
+          'Error received from Replicate while loading the results',
+          'warn',
+          predictionResult.error
+        );
+        new Notice(
+          `${MSG_IMAGE_GENERATION_ERROR}: [${predictionResult.error}]`,
+          NOTICE_TIMEOUT
+        );
+        return;
+      }
+
       if (predictionResult.status === 'succeeded') {
         log(
           'Successfully loaded the results from Replicate',
-          'info',
+          'debug',
           predictionResult
         );
 
-        // TODO HANDLE SUCCESS
+        let result = '';
+
+        if (Array.isArray(predictionResult.output)) {
+          result = predictionResult.output.join(', ');
+        } else {
+          result = predictionResult.output;
+        }
+
+        log('Image generation result: ', 'debug', result);
+
+        if (settings.copyOutputToClipboard) {
+          try {
+            await navigator.clipboard.writeText(result);
+          } catch (_) {
+            // Ignore errors (can occur if DevTools are open)
+          }
+        }
+
+        new Notice(
+          `Successfully generated image(s) using Replicate.com: [${result}]`,
+          NOTICE_TIMEOUT
+        );
       }
     }
   } catch (error) {
@@ -125,24 +159,4 @@ export const generateImages = async (
     new Notice(`${MSG_IMAGE_GENERATION_ERROR}: [${error}]`, NOTICE_TIMEOUT);
     return;
   }
-
-  //await navigator.clipboard.writeText(prompt);
-  // display notice once completed (mention if copied to clipboard)
 };
-
-// if (predictionResult.error) {
-//   console.warn('Error: ', predictionResult.error);
-//   setLoading(false);
-//   setError(`Error while generating prediction: ${predictionResult.error}`);
-//   return;
-// }
-//
-// {!loading && prediction && prediction.output && (
-//   <Image
-//     src={Array.isArray(prediction.output) ? prediction.output[prediction.output.length - 1] : prediction.output}
-//   width={500}
-//   height={500}
-//   alt="Image generated using AI"
-//   className="object-cover rounded-md border-gray-300 border-2"
-//     />
-// )}
