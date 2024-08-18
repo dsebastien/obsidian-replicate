@@ -9,7 +9,7 @@ import {
 } from './constants';
 import { generateImages } from './utils/generate-images.fn';
 import { PromptModal } from './modals/prompt-modal';
-import {isApiKeyConfigured} from "./utils/is-api-key-configured.fn";
+import { isApiKeyConfigured } from './utils/is-api-key-configured.fn';
 
 export class ReplicatePlugin extends Plugin {
   /**
@@ -110,7 +110,8 @@ export class ReplicatePlugin extends Plugin {
       }
 
       if (loadedSettings.imageGenerationConfiguration) {
-        draft.imageGenerationConfiguration = loadedSettings.imageGenerationConfiguration;
+        draft.imageGenerationConfiguration =
+          loadedSettings.imageGenerationConfiguration;
       } else {
         log(
           'The loaded settings miss the [imageGenerationConfiguration] property',

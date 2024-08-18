@@ -1,4 +1,4 @@
-type WebhookEventType = "start" | "output" | "logs" | "completed";
+type WebhookEventType = 'start' | 'output' | 'logs' | 'completed';
 
 export interface ReplicateCreatePrediction {
   model: string;

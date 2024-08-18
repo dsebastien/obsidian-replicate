@@ -9,4 +9,5 @@ export const MSG_API_KEY_CONFIGURATION_REQUIRED =
 export const MSG_IMAGE_GENERATION_MODEL_CONFIGURATION_REQUIRED =
   'Please configure the Replicate plugin to provide an image generation model';
 
-export const MSG_IMAGE_GENERATION_ERROR = 'Error while generating image(s) using Replicate.com';
+export const MSG_IMAGE_GENERATION_ERROR =
+  'Error while generating image(s) using Replicate.com';

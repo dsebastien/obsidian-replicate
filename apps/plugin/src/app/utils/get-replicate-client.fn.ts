@@ -1,5 +1,5 @@
-import {log} from "./log";
-import Replicate from "replicate";
+import { log } from './log';
+import Replicate from 'replicate';
 
 export const getReplicateClient = (apiKey: string): Replicate => {
   log('Creating Replicate.com API client', 'debug');
@@ -7,5 +7,4 @@ export const getReplicateClient = (apiKey: string): Replicate => {
     auth: apiKey,
     userAgent: 'Obsidian Replicate',
   });
-}
-
+};

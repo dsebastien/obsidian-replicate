@@ -1,16 +1,15 @@
 import {
-  App, Notice,
+  App,
+  Notice,
   PluginSettingTab,
   Setting,
   ToggleComponent,
 } from 'obsidian';
 import { ReplicatePlugin } from '../plugin';
 import { Draft, produce } from 'immer';
-import {
-  PluginSettings,
-} from '../types/plugin-settings.intf';
+import { PluginSettings } from '../types/plugin-settings.intf';
 import { log } from '../utils/log';
-import {NOTICE_TIMEOUT} from "../constants";
+import { NOTICE_TIMEOUT } from '../constants';
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
@@ -139,20 +138,34 @@ export class SettingsTab extends PluginSettingTab {
       .addTextArea((text) => {
         text
           .setPlaceholder('Valid JSON object')
-          .setValue(JSON.stringify(this.plugin.settings.imageGenerationConfiguration))
+          .setValue(
+            JSON.stringify(this.plugin.settings.imageGenerationConfiguration)
+          )
           .onChange(async (newValue) => {
-            log(`Image generation model configuration set to: `, 'debug', newValue);
+            log(
+              `Image generation model configuration set to: `,
+              'debug',
+              newValue
+            );
             let imageGenerationModelConfiguration: object = {};
-            try{
+            try {
               imageGenerationModelConfiguration = JSON.parse(newValue);
-            } catch(error) {
-              log('Invalid JSON for image generation model configuration', 'warn', error);
-              new Notice('The Replicate.com image generation model configuration is not a valid JSON object. Please correct it.', NOTICE_TIMEOUT);
+            } catch (error) {
+              log(
+                'Invalid JSON for image generation model configuration',
+                'warn',
+                error
+              );
+              new Notice(
+                'The Replicate.com image generation model configuration is not a valid JSON object. Please correct it.',
+                NOTICE_TIMEOUT
+              );
             }
             this.plugin.settings = produce(
               this.plugin.settings,
               (draft: Draft<PluginSettings>) => {
-                draft.imageGenerationConfiguration = imageGenerationModelConfiguration
+                draft.imageGenerationConfiguration =
+                  imageGenerationModelConfiguration;
               }
             );
             await this.plugin.saveSettings();

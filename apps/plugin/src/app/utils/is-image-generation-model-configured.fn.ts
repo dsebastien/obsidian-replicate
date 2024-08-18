@@ -1,5 +1,7 @@
-import {PluginSettings} from "../types/plugin-settings.intf";
+import { PluginSettings } from '../types/plugin-settings.intf';
 
-export const isImageGenerationModelConfigured = (settings: PluginSettings): boolean => {
+export const isImageGenerationModelConfigured = (
+  settings: PluginSettings
+): boolean => {
   return '' !== settings.imageGenerationModel.trim();
-}
+};
