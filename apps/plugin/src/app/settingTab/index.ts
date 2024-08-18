@@ -1,10 +1,10 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import { MyPlugin } from '../plugin';
+import { ReplicatePlugin } from '../plugin';
 
 export class SettingsTab extends PluginSettingTab {
-  plugin: MyPlugin;
+  plugin: ReplicatePlugin;
 
-  constructor(app: App, plugin: MyPlugin) {
+  constructor(app: App, plugin: ReplicatePlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -23,7 +23,7 @@ export class SettingsTab extends PluginSettingTab {
       .setName('Follow me on X')
       .setDesc('@dSebastien')
       .addButton((button) => {
-        button.setCta()
+        button.setCta();
         button.setButtonText('Follow me on X').onClick(() => {
           window.open('https://x.com/dSebastien');
         });

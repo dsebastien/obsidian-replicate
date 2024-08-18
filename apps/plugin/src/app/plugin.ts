@@ -4,8 +4,7 @@ import { SettingsTab } from './settingTab';
 import { log } from './utils/log';
 import { Draft, produce } from 'immer';
 
-// FIXME rename this class!
-export class MyPlugin extends Plugin {
+export class ReplicatePlugin extends Plugin {
   /**
    * The plugin settings are immutable
    */
