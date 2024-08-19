@@ -1,4 +1,4 @@
-import { Notice, Plugin } from 'obsidian';
+import { Editor, Notice, Plugin } from 'obsidian';
 import { DEFAULT_SETTINGS, PluginSettings } from './types/plugin-settings.intf';
 import { SettingsTab } from './settingTab';
 import { log } from './utils/log';
@@ -36,17 +36,7 @@ export class ReplicatePlugin extends Plugin {
       id: 'generate-image-using-replicate',
       name: 'Generate image(s) using Replicate.com',
       callback: async () => {
-        log('Generating image(s) using Replicate.com', 'debug');
-
-        // Don't allow generating if the API key is not set
-        if (!isApiKeyConfigured(this.settings)) {
-          new Notice(MSG_API_KEY_CONFIGURATION_REQUIRED, NOTICE_TIMEOUT);
-          return;
-        }
-
-        new PromptModal(this.app, async (prompt) => {
-          await generateImages(prompt, this.settings, this.app);
-        }).open();
+        await this.generateImages();
       },
     });
 
@@ -59,26 +49,7 @@ export class ReplicatePlugin extends Plugin {
           item
             .setTitle('Generate image(s) using Replicate.com')
             .onClick(async () => {
-              log('Generating image(s) using Replicate.com', 'debug');
-
-              // Don't allow generating if the API key is not set
-              if (!isApiKeyConfigured(this.settings)) {
-                new Notice(MSG_API_KEY_CONFIGURATION_REQUIRED, NOTICE_TIMEOUT);
-                return;
-              }
-
-              const selection = editor.getSelection();
-
-              // If no selection or empty selection: show the prompt modal
-              if (!selection || '' === selection.trim()) {
-                new PromptModal(this.app, async (prompt) => {
-                  await generateImages(prompt, this.settings, this.app);
-                }).open();
-                return;
-              }
-
-              // Use the selection as prompt
-              await generateImages(selection, this.settings, this.app);
+              await this.generateImages(editor);
             });
         });
       })
@@ -87,6 +58,37 @@ export class ReplicatePlugin extends Plugin {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onunload() {}
+
+  async generateImages(editor?: Editor) {
+    log('Generate image(s) using Replicate.com', 'debug');
+
+    // Don't allow generating if the API key is not set
+    if (!isApiKeyConfigured(this.settings)) {
+      new Notice(MSG_API_KEY_CONFIGURATION_REQUIRED, NOTICE_TIMEOUT);
+      return;
+    }
+
+    // Get the selection if any
+    let selection = editor ? editor.getSelection() : '';
+    if (
+      this.app.workspace.activeEditor &&
+      this.app.workspace.activeEditor.editor
+    ) {
+      const activeEditor = this.app.workspace.activeEditor.editor;
+      selection = activeEditor.getSelection();
+    }
+
+    // If no selection or empty selection: show the prompt modal
+    if (!selection || '' === selection.trim()) {
+      new PromptModal(this.app, async (prompt) => {
+        await generateImages(prompt, this.settings, this.app);
+      }).open();
+      return;
+    }
+
+    // Use the selection as prompt
+    await generateImages(selection, this.settings, this.app);
+  }
 
   /**
    * Load the plugin settings

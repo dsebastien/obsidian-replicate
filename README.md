@@ -2,15 +2,33 @@
 
 Obsidian plugin that integrates [Replicate.com](https://replicate.com/).
 
+## Pre-requisites
+
+To use this plugin, you will need a Replicate.com account, and an API Key. Note that many models are paid, so you may need to configure billing on Replicate.com to use them.
+To create an API Key:
+
+- Go to https://replicate.com/account/api-tokens
+- Enter a name for your token (e.g., Obsidian Replicate plugin token)
+- Click on "Create token"
+- Copy the token
+
 ## Features
 
-- Image generation
+This plugin can currently generate images using the various models supported by Replicate.com
+In the future, it could also generate text using text-generation LLMs supported by Replicate.com.
 
-Future: text generation.
+## Usage
+
+Once configured, there are two ways to use this plugin:
+
+- Using the command
+- Using the context menu
+
+To use the command, hit `Ctrl/Cmd+P` to open the command palette, then type "Generate image(s)..." and hit `Enter`. If you have selected text, then it will be used as prompt. If not, a modal dialog will be shown to enter the prompt.
 
 ## Commands
 
-- Generate image(s) using Replicate.com: Generate images using Replicate.com. This first shows a modal dialog where the prompt can be specified
+- Generate image(s) using Replicate.com: Generate images using Replicate.com. If there's a selection, then it is used as prompt. If not, a modal is shown to enter the prompt.
 
 ## Configuration
 
@@ -19,6 +37,8 @@ Future: text generation.
 - Replicate.com API Key: the Replicate.com API key to use
 - Copy output to clipboard: if you want the generated output to be automatically copied to the clipboard
 - Append output to current note: append the generated output to the current note (if possible)
+
+WARNING: When you generate images using this plugin, those are stored on Replicate's servers for a short duration. Consider that those will disappear after a while. If you want to keep those, make sure to download them.
 
 ### Image generation model
 
