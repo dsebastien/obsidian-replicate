@@ -38,7 +38,7 @@ To use the command, hit `Ctrl/Cmd+P` to open the command palette, then type "Gen
 - Copy output to clipboard: if you want the generated output to be automatically copied to the clipboard
 - Append output to current note: append the generated output to the current note (if possible)
 
-WARNING: When you generate images using this plugin, those are stored on Replicate's servers for a short duration. Consider that those will disappear after a while. If you want to keep those, make sure to download them.
+WARNING: When you generate images using this plugin, those are only stored on Replicate's servers for ONE HOUR. After that time, those will disappear. If you want to keep those, make sure to download them.
 
 ### Image generation model
 
