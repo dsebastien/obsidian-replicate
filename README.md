@@ -1,6 +1,6 @@
 # Obsidian Replicate.com integration
 
-Obsidian plugin that integrates [Replicate.com](https://replicate.com/).
+Obsidian plugin that integrates [Replicate.com](https://replicate.com/), and enables using the various image generation models supported by Replicate.com (e.g., Stable Diffusion, FLUX.1, and many more).
 
 ## Pre-requisites
 
