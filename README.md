@@ -15,11 +15,27 @@ Future: text generation.
 - Replicate.com API Key: the Replicate.com API key to use
 - Copy output to clipboard: if you want the generated output to be automatically copied to the clipboard
 
-### Image generation
+### Image generation model
 
-- Image generation model: the name of the image generation model to use (Replicate parameter: model)
-- Image generation model version: if you want to enforce using a specific model version (Replicate parameter: version)
-- Image generation model configuration: JSON object to pass as input to the model. This varies depending on the chosen model and is documented on Replicate.com's website
+Image generation model: the name of the image generation model to use, either with or without the version.
+
+The two possible forms are:
+
+- `<model_owner>/<model_name>`
+- `<model_owner>/<model_name>:<version>`
+
+Examples:
+
+- black-forest-labs/flux-dev
+- black-forest-labs/flux-dev:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa
+
+The advantage of specifying the version is that you can lock the model to a specific version, which is useful if you want to ensure that the output remains consistent over time. If you don't specify the version, the latest version will be used.
+
+You can find the existing versions here using the method described here: https://replicate.com/docs/reference/http#list-model-versions
+
+### Image generation model configuration
+
+A JSON object to pass as input to the image generation model. This varies depending on the chosen model and is documented on Replicate's website
 
 ## News & support
 

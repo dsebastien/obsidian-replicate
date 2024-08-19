@@ -38,7 +38,6 @@ export class SettingsTab extends PluginSettingTab {
     imageGenerationSettingsGroup.setHeading();
 
     this.renderImageGenerationModel(containerEl);
-    this.renderImageGenerationModelVersion(containerEl);
     this.renderImageGenerationModelConfiguration(containerEl);
 
     this.renderFollowButton(containerEl);
@@ -98,32 +97,7 @@ export class SettingsTab extends PluginSettingTab {
             this.plugin.settings = produce(
               this.plugin.settings,
               (draft: Draft<PluginSettings>) => {
-                draft.imageGenerationModel = newValue;
-              }
-            );
-            await this.plugin.saveSettings();
-          });
-      });
-  }
-
-  renderImageGenerationModelVersion(containerEl: HTMLElement) {
-    new Setting(containerEl)
-      .setName('Image generation model version (optional)')
-      .setDesc('The version of the image generation model to use.')
-      .addText((text) => {
-        text
-          .setPlaceholder('')
-          .setValue(
-            this.plugin.settings.imageGenerationModelVersion
-              ? this.plugin.settings.imageGenerationModelVersion
-              : ''
-          )
-          .onChange(async (newValue) => {
-            log(`Image generation model version set to: `, 'debug', newValue);
-            this.plugin.settings = produce(
-              this.plugin.settings,
-              (draft: Draft<PluginSettings>) => {
-                draft.imageGenerationModelVersion = newValue;
+                draft.imageGenerationModel = newValue as `${string}/${string}`; // FIXME is this ok?
               }
             );
             await this.plugin.saveSettings();

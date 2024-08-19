@@ -4,8 +4,7 @@ export interface PluginSettings {
   copyOutputToClipboard: boolean;
 
   // Image Generation
-  imageGenerationModel: string;
-  imageGenerationModelVersion?: string;
+  imageGenerationModel: `${string}/${string}` | `${string}/${string}:${string}`;
   imageGenerationConfiguration: object;
 }
 
@@ -14,7 +13,9 @@ export const DEFAULT_SETTINGS: PluginSettings = {
   apiKey: '',
   copyOutputToClipboard: true,
 
-  // Image Generation
+  // Image Generation model
+  // Form 1: <model_owner>/<model_name>
+  // Form 2: <model_owner>/<model_name>:<version>
   // black-forest-labs/flux-pro
   // black-forest-labs/flux-dev
   // black-forest-labs/flux-schnell

@@ -98,17 +98,6 @@ export class ReplicatePlugin extends Plugin {
         needToSaveSettings = true;
       }
 
-      if (loadedSettings.imageGenerationModelVersion) {
-        draft.imageGenerationModelVersion =
-          loadedSettings.imageGenerationModelVersion;
-      } else {
-        log(
-          'The loaded settings miss the [imageGenerationModelVersion] property',
-          'debug'
-        );
-        needToSaveSettings = true;
-      }
-
       if (loadedSettings.imageGenerationConfiguration) {
         draft.imageGenerationConfiguration =
           loadedSettings.imageGenerationConfiguration;

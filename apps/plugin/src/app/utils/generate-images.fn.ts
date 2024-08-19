@@ -9,8 +9,8 @@ import {
 } from '../constants';
 import { isApiKeyConfigured } from './is-api-key-configured.fn';
 import { isImageGenerationModelConfigured } from './is-image-generation-model-configured.fn';
-import { ReplicateCreatePrediction } from './replicate-create-prediction-input.intf';
 import { getReplicateClient } from './get-replicate-client.fn';
+import { ReplicateRunModelConfiguration } from '../types/replicate-run-model-configuration.intf';
 
 export const generateImages = async (
   prompt: string | undefined,
@@ -45,115 +45,54 @@ export const generateImages = async (
     NOTICE_TIMEOUT
   );
 
+  const replicateRunModelConfiguration: ReplicateRunModelConfiguration = {
+    // Model configuration
+    input: {
+      ...settings.imageGenerationConfiguration,
+      prompt,
+    },
+  };
+
   try {
-    const replicateCreatePredictionConfiguration: ReplicateCreatePrediction = {
-      model: settings.imageGenerationModel,
-      // Model configuration
-      input: {
-        ...settings.imageGenerationConfiguration,
-        prompt, // FIXME ensure that the prompt is the one we expect in the request
-      },
-    };
-
-    if (settings.imageGenerationModelVersion) {
-      if ('' !== settings.imageGenerationModelVersion.trim()) {
-        replicateCreatePredictionConfiguration.version =
-          settings.imageGenerationModelVersion;
-      }
-    }
-
     log(
-      'Sending image generation request to Replicate.com',
+      'Sending image generation request to Replicate.com. Configuration: ',
       'debug',
-      replicateCreatePredictionConfiguration
+      replicateRunModelConfiguration
     );
 
-    let predictionResult = await replicate.predictions.create(
-      replicateCreatePredictionConfiguration
+    const output = await replicate.run(
+      settings.imageGenerationModel,
+      replicateRunModelConfiguration
     );
 
-    if (predictionResult.error) {
-      log('Error received from Replicate.com', 'warn', predictionResult.error);
-      new Notice(
-        `${MSG_IMAGE_GENERATION_ERROR}: [${predictionResult.error}]`,
-        NOTICE_TIMEOUT
-      );
+    if (!output) {
+      log('Failed to generate images using Replicate.com', 'warn');
+      new Notice(MSG_IMAGE_GENERATION_ERROR, NOTICE_TIMEOUT);
       return;
     }
 
-    while (
-      predictionResult.status !== 'succeeded' &&
-      predictionResult.status !== 'failed'
-    ) {
-      await sleep(1000);
+    let result = '';
 
-      log('Loading the image generation results from Replicate.com', 'debug');
-      predictionResult = await replicate.predictions.get(predictionResult.id);
-      log('Received response from Replicate.com', 'debug', predictionResult);
+    if (Array.isArray(output)) {
+      result = output.join('\n');
+    } else {
+      result = JSON.stringify(output); // FIXME is this ok?
+    }
 
-      if (predictionResult?.error) {
-        log(
-          'Error received from Replicate',
-          'warn',
-          predictionResult.error.detail
-        );
-        new Notice(
-          `${MSG_IMAGE_GENERATION_ERROR}: [${predictionResult.error.detail}]`,
-          NOTICE_TIMEOUT
-        );
-        return;
-      }
+    log('Image generation result: ', 'debug', result);
 
-      if (predictionResult.status === 'failed') {
-        log('Failed to load the results from Replicate', 'warn');
-        new Notice(MSG_IMAGE_GENERATION_ERROR, NOTICE_TIMEOUT);
-        return;
-      }
-
-      if (predictionResult.error) {
-        log(
-          'Error received from Replicate while loading the results',
-          'warn',
-          predictionResult.error
-        );
-        new Notice(
-          `${MSG_IMAGE_GENERATION_ERROR}: [${predictionResult.error}]`,
-          NOTICE_TIMEOUT
-        );
-        return;
-      }
-
-      if (predictionResult.status === 'succeeded') {
-        log(
-          'Successfully loaded the results from Replicate',
-          'debug',
-          predictionResult
-        );
-
-        let result = '';
-
-        if (Array.isArray(predictionResult.output)) {
-          result = predictionResult.output.join('\n');
-        } else {
-          result = predictionResult.output;
-        }
-
-        log('Image generation result: ', 'debug', result);
-
-        if (settings.copyOutputToClipboard) {
-          try {
-            await navigator.clipboard.writeText(result);
-          } catch (_) {
-            // Ignore errors (can occur if DevTools are open)
-          }
-        }
-
-        new Notice(
-          `Successfully generated image(s) using Replicate.com: [${result}]`,
-          NOTICE_TIMEOUT
-        );
+    if (settings.copyOutputToClipboard) {
+      try {
+        await navigator.clipboard.writeText(result);
+      } catch (_) {
+        // Ignore errors (can occur if DevTools are open)
       }
     }
+
+    new Notice(
+      `Successfully generated image(s) using Replicate.com: [${result}]`,
+      NOTICE_TIMEOUT
+    );
   } catch (error) {
     log('Error while generating image(s) using Replicate.com', 'warn', error);
     new Notice(`${MSG_IMAGE_GENERATION_ERROR}: [${error}]`, NOTICE_TIMEOUT);
