@@ -133,7 +133,7 @@ export const generateImages = async (
         let result = '';
 
         if (Array.isArray(predictionResult.output)) {
-          result = predictionResult.output.join(', ');
+          result = predictionResult.output.join('\n');
         } else {
           result = predictionResult.output;
         }
