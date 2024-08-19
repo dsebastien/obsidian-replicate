@@ -49,6 +49,40 @@ export class ReplicatePlugin extends Plugin {
         }).open();
       },
     });
+
+    // Add context menu entries
+    this.registerEvent(
+      this.app.workspace.on('editor-menu', (menu, editor) => {
+        menu.addSeparator();
+        menu.addItem((item) => {
+          item.setIcon('image');
+          item
+            .setTitle('Generate image(s) using Replicate.com')
+            .onClick(async () => {
+              log('Generating image(s) using Replicate.com', 'debug');
+
+              // Don't allow generating if the API key is not set
+              if (!isApiKeyConfigured(this.settings)) {
+                new Notice(MSG_API_KEY_CONFIGURATION_REQUIRED, NOTICE_TIMEOUT);
+                return;
+              }
+
+              const selection = editor.getSelection();
+
+              // If no selection or empty selection: show the prompt modal
+              if (!selection || '' === selection.trim()) {
+                new PromptModal(this.app, async (prompt) => {
+                  await generateImages(prompt, this.settings, this.app);
+                }).open();
+                return;
+              }
+
+              // Use the selection as prompt
+              await generateImages(selection, this.settings, this.app);
+            });
+        });
+      })
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

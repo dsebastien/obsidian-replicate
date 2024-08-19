@@ -19,7 +19,7 @@ import { ReplicateRunModelConfiguration } from '../types/replicate-run-model-con
  * @param app - The Obsidian app
  */
 export const generateImages = async (
-  prompt: string | undefined,
+  prompt: string,
   settings: PluginSettings,
   app: App
 ): Promise<void> => {
@@ -114,8 +114,17 @@ export const generateImages = async (
 
       const activeEditor = app.workspace.activeEditor.editor;
       const cursor = activeEditor.getCursor();
+      const selection = activeEditor.getSelection();
 
-      let textToAppend = `Prompt: ${prompt}\nImages generated using Replicate.com:\n\n`;
+      let textToAppend = '';
+
+      // Keep the selection if it's not empty and just append a newline
+      if (selection && '' !== selection.trim()) {
+        textToAppend = `\n`;
+      }
+
+      textToAppend += `Images generated using Replicate.com with the following prompt: \`${prompt}\`\n\n`;
+
       if (Array.isArray(output)) {
         for (const line of output) {
           textToAppend += `![](${line})\n`;
@@ -128,7 +137,14 @@ export const generateImages = async (
         'Editor found. Appending the output to the current cursor position',
         'debug'
       );
-      activeEditor.replaceRange(textToAppend, cursor);
+
+      // If the user's selection is the same as the prompt, replace the selection with the output
+      if (selection && selection === prompt) {
+        activeEditor.replaceSelection(textToAppend);
+        // Otherwise, append the output but keep the selection if any
+      } else {
+        activeEditor.replaceRange(textToAppend, cursor);
+      }
     }
   } catch (error) {
     log('Error while generating image(s) using Replicate.com', 'warn', error);
