@@ -2,3 +2,58 @@
 .support-header-margin {
   margin-top: 0.75rem;
 }
+
+/* Render the image generation modal nicely */
+.replicate-plugin-prompt-modal > div.modal-content > div.setting-item {
+  flex-direction: column;
+}
+
+.replicate-plugin-prompt-modal
+  > div.modal-content
+  > div.setting-item
+  > div.setting-item-info {
+  width: 100%;
+}
+
+.replicate-plugin-prompt-modal
+  > div.modal-content
+  > div.setting-item
+  > div.setting-item-control {
+  width: 100%;
+}
+
+.replicate-plugin-prompt-modal
+  > div.modal-content
+  > div.setting-item
+  > div.setting-item-control
+  > textarea {
+  margin-top: 1rem;
+  width: 100%;
+  height: 250px;
+}
+
+/* Render the image generation model configuration nicely */
+.replicate-plugin-setting-image-generation-model-configuration {
+  flex-flow: column;
+}
+
+.replicate-plugin-setting-image-generation-model-configuration > div {
+  width: 100%;
+}
+
+.replicate-plugin-setting-image-generation-model-configuration
+  > .setting-item-info {
+  margin-inline-end: 0;
+}
+
+.replicate-plugin-setting-image-generation-model-configuration
+  > .setting-item-control {
+  margin-top: 1rem;
+}
+
+.replicate-plugin-setting-image-generation-model-configuration
+  > .setting-item-control
+  > textarea {
+  width: 100%;
+  min-height: 250px;
+}
