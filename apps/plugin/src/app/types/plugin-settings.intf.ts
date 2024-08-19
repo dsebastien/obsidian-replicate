@@ -2,6 +2,7 @@ export interface PluginSettings {
   // General
   apiKey: string;
   copyOutputToClipboard: boolean;
+  appendOutputToCurrentNote: boolean;
 
   // Image Generation
   imageGenerationModel: `${string}/${string}` | `${string}/${string}:${string}`;
@@ -11,7 +12,8 @@ export interface PluginSettings {
 export const DEFAULT_SETTINGS: PluginSettings = {
   // General
   apiKey: '',
-  copyOutputToClipboard: true,
+  copyOutputToClipboard: false,
+  appendOutputToCurrentNote: true,
 
   // Image Generation model
   // Form 1: <model_owner>/<model_name>

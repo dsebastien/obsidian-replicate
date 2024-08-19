@@ -1,3 +1,5 @@
+import { Prediction } from 'replicate';
+
 export interface ReplicateRunModelConfiguration {
   input: object;
   wait?: {
@@ -5,4 +7,5 @@ export interface ReplicateRunModelConfiguration {
   };
   webhook?: string;
   signal?: AbortSignal;
+  progress?: (prediction: Prediction) => void;
 }

@@ -1,5 +1,6 @@
 import {
   App,
+  debounce,
   Notice,
   PluginSettingTab,
   Setting,
@@ -32,6 +33,7 @@ export class SettingsTab extends PluginSettingTab {
 
     this.renderApiKey(containerEl);
     this.renderCopyOutputToClipboard(containerEl);
+    this.renderAppendOutputToCurrentNote(containerEl);
 
     const imageGenerationSettingsGroup = new Setting(containerEl);
     imageGenerationSettingsGroup.setName('Image Generation');
@@ -84,6 +86,26 @@ export class SettingsTab extends PluginSettingTab {
       });
   }
 
+  renderAppendOutputToCurrentNote(containerEl: HTMLElement) {
+    new Setting(containerEl)
+      .setName('Append the generated output to the current note')
+      .setDesc(
+        'If enabled, the generated output will be appended to the current note (if possibvle).'
+      )
+      .addToggle((toggle: ToggleComponent) => {
+        toggle.setValue(this.plugin.settings.appendOutputToCurrentNote);
+        toggle.onChange(async (newValue: boolean) => {
+          this.plugin.settings = produce(
+            this.plugin.settings,
+            (draft: Draft<PluginSettings>) => {
+              draft.appendOutputToCurrentNote = newValue;
+            }
+          );
+          await this.plugin.saveSettings();
+        });
+      });
+  }
+
   renderImageGenerationModel(containerEl: HTMLElement) {
     new Setting(containerEl)
       .setName('Image generation model')
@@ -109,41 +131,66 @@ export class SettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName('Image generation model configuration')
       .setDesc('The image generation model configuration.')
+      .setClass('replicate-plugin-setting-image-generation-model-configuration')
       .addTextArea((text) => {
         text
           .setPlaceholder('Valid JSON object')
           .setValue(
-            JSON.stringify(this.plugin.settings.imageGenerationConfiguration)
+            // Format the JSON nicely
+            JSON.stringify(
+              this.plugin.settings.imageGenerationConfiguration,
+              null,
+              2
+            )
           )
-          .onChange(async (newValue) => {
-            log(
-              `Image generation model configuration set to: `,
-              'debug',
-              newValue
-            );
-            let imageGenerationModelConfiguration: object = {};
-            try {
-              imageGenerationModelConfiguration = JSON.parse(newValue);
-            } catch (error) {
-              log(
-                'Invalid JSON for image generation model configuration',
-                'warn',
-                error
-              );
-              new Notice(
-                'The Replicate.com image generation model configuration is not a valid JSON object. Please correct it.',
-                NOTICE_TIMEOUT
-              );
-            }
-            this.plugin.settings = produce(
-              this.plugin.settings,
-              (draft: Draft<PluginSettings>) => {
-                draft.imageGenerationConfiguration =
-                  imageGenerationModelConfiguration;
-              }
-            );
-            await this.plugin.saveSettings();
-          });
+          // Debounce the change event to avoid saving after each keystroke
+          .onChange(
+            debounce(
+              async (newValue) => {
+                log(
+                  `Image generation model configuration set to: `,
+                  'debug',
+                  newValue
+                );
+
+                let imageGenerationModelConfiguration: object = {};
+
+                if ('' === newValue.trim()) {
+                  text.setValue(
+                    JSON.stringify(imageGenerationModelConfiguration, null, 2)
+                  );
+                } else {
+                  try {
+                    imageGenerationModelConfiguration = JSON.parse(newValue);
+                  } catch (error) {
+                    log(
+                      'Invalid JSON for image generation model configuration',
+                      'warn',
+                      error
+                    );
+                    new Notice(
+                      'The Replicate.com image generation model configuration is not a valid JSON object. Please correct it.',
+                      NOTICE_TIMEOUT
+                    );
+                    // TODO improve error handling here when the JSON is invalid
+                    imageGenerationModelConfiguration =
+                      newValue as unknown as object;
+                  }
+                }
+
+                this.plugin.settings = produce(
+                  this.plugin.settings,
+                  (draft: Draft<PluginSettings>) => {
+                    draft.imageGenerationConfiguration =
+                      imageGenerationModelConfiguration;
+                  }
+                );
+                await this.plugin.saveSettings();
+              },
+              500,
+              true
+            )
+          );
       });
   }
 

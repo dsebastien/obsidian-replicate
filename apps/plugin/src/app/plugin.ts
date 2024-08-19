@@ -45,8 +45,7 @@ export class ReplicatePlugin extends Plugin {
         }
 
         new PromptModal(this.app, async (prompt) => {
-          new Notice(`Prompt: ${prompt}`);
-          await generateImages(prompt, this.settings);
+          await generateImages(prompt, this.settings, this.app);
         }).open();
       },
     });
@@ -83,6 +82,17 @@ export class ReplicatePlugin extends Plugin {
       } else {
         log(
           'The loaded settings miss the [copyOutputToClipboard] property',
+          'debug'
+        );
+        needToSaveSettings = true;
+      }
+
+      if (loadedSettings.appendOutputToCurrentNote) {
+        draft.appendOutputToCurrentNote =
+          loadedSettings.appendOutputToCurrentNote;
+      } else {
+        log(
+          'The loaded settings miss the [appendOutputToCurrentNote] property',
           'debug'
         );
         needToSaveSettings = true;

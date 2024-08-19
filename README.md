@@ -8,12 +8,17 @@ Obsidian plugin that integrates [Replicate.com](https://replicate.com/).
 
 Future: text generation.
 
+## Commands
+
+- Generate image(s) using Replicate.com: Generate images using Replicate.com. This first shows a modal dialog where the prompt can be specified
+
 ## Configuration
 
 ### General
 
 - Replicate.com API Key: the Replicate.com API key to use
 - Copy output to clipboard: if you want the generated output to be automatically copied to the clipboard
+- Append output to current note: append the generated output to the current note (if possible)
 
 ### Image generation model
 
@@ -36,6 +41,12 @@ You can find the existing versions here using the method described here: https:/
 ### Image generation model configuration
 
 A JSON object to pass as input to the image generation model. This varies depending on the chosen model and is documented on Replicate's website
+
+## Tips and tricks
+
+In the image generation modal shown after launching the "Generate image(s) using Replicate.com" command, you can use the following keyboard shortcuts:
+
+- `Ctrl/Cmd+Enter` to generate the image(s)
 
 ## News & support
 
