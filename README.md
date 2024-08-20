@@ -2,6 +2,10 @@
 
 Obsidian plugin that integrates [Replicate.com](https://replicate.com/), and enables using the various image generation models supported by Replicate.com (e.g., Stable Diffusion, FLUX.1, and many more).
 
+Demo:
+
+![Demo](images/demo.gif)
+
 ## Pre-requisites
 
 To use this plugin, you will need a Replicate.com account, and an API Key. Note that many models are paid, so you may need to configure billing on Replicate.com to use them.
