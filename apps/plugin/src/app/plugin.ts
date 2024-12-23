@@ -34,7 +34,7 @@ export class ReplicatePlugin extends Plugin {
     // Add commands
     this.addCommand({
       id: 'generate-image-using-replicate',
-      name: 'Generate image(s) using Replicate.com',
+      name: 'Generate image(s)',
       callback: async () => {
         await this.generateImages();
       },
