@@ -1,77 +1,79 @@
 # Obsidian Replicate.com integration
 
-Obsidian plugin that integrates [Replicate.com](https://replicate.com/), and enables using the various image generation models supported by Replicate.com (e.g., Stable Diffusion, FLUX.1, and many more).
+Obsidian plugin that integrates [Replicate.com](https://replicate.com/) and enables using the various image generation models supported by Replicate (e.g., Stable Diffusion, FLUX.1, and many more) directly from your vault.
 
 Demo:
 
 ![Demo](images/demo.gif)
 
-## Pre-requisites
-
-To use this plugin, you will need a Replicate.com account, and an API Key. Note that many models are paid, so you may need to configure billing on Replicate.com to use them.
-To create an API Key:
-
-- Go to https://replicate.com/account/api-tokens
-- Enter a name for your token (e.g., Obsidian Replicate plugin token)
-- Click on "Create token"
-- Copy the token
-
 ## Features
 
-This plugin can currently generate images using the various models supported by Replicate.com
-In the future, it could also generate text using text-generation LLMs supported by Replicate.com.
+- Generate images from the current selection or from a prompt entered in a modal.
+- Configurable Replicate model (`<owner>/<name>` or `<owner>/<name>:<version>`).
+- Free-form JSON input passed as `input` to the chosen model — works with any model that accepts a `prompt`.
+- Optional: copy the generated output (URLs) to the clipboard.
+- Optional: append the generated output as markdown image embeds to the current note.
+
+> ⚠️ Images generated via Replicate are only stored on Replicate's servers **for one hour**. Download anything you want to keep.
+
+## Prerequisites
+
+- A [Replicate.com](https://replicate.com) account.
+- A Replicate API token. Create one at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
+- A configured billing method on Replicate if the model you want to use is paid.
+
+## Installation
+
+### From the Obsidian community catalog (once available)
+
+1. Open **Settings → Community plugins → Browse**.
+2. Search for **Replicate**.
+3. Select **Install**, then **Enable**.
+
+### Manual install
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from the latest [GitHub release](https://github.com/dsebastien/obsidian-replicate/releases).
+2. Copy them into `<Vault>/.obsidian/plugins/replicate/`.
+3. Reload Obsidian and enable the plugin in **Settings → Community plugins**.
 
 ## Usage
 
-Once configured, there are two ways to use this plugin:
+Once the plugin is installed, enabled, and configured with your API key:
 
-- Using the command
-- Using the context menu
+- **Command palette**: press `Ctrl/Cmd + P`, search for **Generate image(s) using Replicate.com**, and press `Enter`.
+- **Context menu**: right-click inside a note and pick the same command.
 
-To use the command, hit `Ctrl/Cmd+P` to open the command palette, then type "Generate image(s)..." and hit `Enter`. If you have selected text, then it will be used as prompt. If not, a modal dialog will be shown to enter the prompt.
+Behaviour:
 
-## Commands
-
-- Generate image(s) using Replicate.com: Generate images using Replicate.com. If there's a selection, then it is used as prompt. If not, a modal is shown to enter the prompt.
+- If you have text selected, that selection is used as the prompt.
+- If nothing is selected, a modal is shown so you can type a prompt.
+- `Ctrl/Cmd + Enter` in the modal submits the prompt.
 
 ## Configuration
 
-### General
+See [docs/configuration.md](docs/configuration.md) for the full reference.
 
-- Replicate.com API Key: the Replicate.com API key to use
-- Copy output to clipboard: if you want the generated output to be automatically copied to the clipboard
-- Append output to current note: append the generated output to the current note (if possible)
+Quick overview:
 
-WARNING: When you generate images using this plugin, those are only stored on Replicate's servers for ONE HOUR. After that time, those will disappear. If you want to keep those, make sure to download them.
-
-### Image generation model
-
-Image generation model: the name of the image generation model to use, either with or without the version.
-
-The two possible forms are:
-
-- `<model_owner>/<model_name>`
-- `<model_owner>/<model_name>:<version>`
-
-Examples:
-
-- black-forest-labs/flux-dev
-- black-forest-labs/flux-dev:5c7d5dc6dd8bf75c1acaa8565735e7986bc5b66206b55cca93cb72c9bf15ccaa
-
-The advantage of specifying the version is that you can lock the model to a specific version, which is useful if you want to ensure that the output remains consistent over time. If you don't specify the version, the latest version will be used.
-
-You can find the existing versions here using the method described here: https://replicate.com/docs/reference/http#list-model-versions
-
-### Image generation model configuration
-
-A JSON object to pass as input to the image generation model. This varies depending on the chosen model and is documented on Replicate's website
+- **Replicate.com API Key** — your API token. Required.
+- **Copy output to clipboard** — copies the generated URL(s) to the clipboard.
+- **Append output to current note** — appends markdown image embeds to the active note.
+- **Image generation model** — `<owner>/<name>` or `<owner>/<name>:<version>`.
+- **Image generation model configuration** — JSON passed as the model's `input`. The prompt is merged in at call time.
 
 ## Tips and tricks
 
-In the image generation modal shown after launching the "Generate image(s) using Replicate.com" command, you can use the following keyboard shortcuts:
+See [docs/tips.md](docs/tips.md) for common tips, troubleshooting, and pointers for picking model versions.
 
-- `Ctrl/Cmd+Enter` to generate the image(s)
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE).
 
 ## News & support
 
-To stay up to date about this plugin, Obsidian in general, Personal Knowledge Management and note-taking, subscribe to [my newsletter](https://dsebastien.net). Note that the best way to support my work is to become a paid subscriber ❤️.
+- Subscribe to [my newsletter](https://dsebastien.net) for updates on this plugin, Obsidian, Personal Knowledge Management, and note-taking. Paid subscribers make this work possible ❤️.
+- Buy me a coffee: [buymeacoffee.com/dsebastien](https://www.buymeacoffee.com/dsebastien).
