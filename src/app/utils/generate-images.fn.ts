@@ -121,11 +121,10 @@ export const generateImages = async (
 
             if (Array.isArray(output)) {
                 for (const line of output) {
-                    textToAppend += `![](${String(line)})\n`
+                    textToAppend += `![](${formatOutputItem(line)})\n`
                 }
             } else {
-                // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                textToAppend += `![](${String(output)})\n`
+                textToAppend += `![](${formatOutputItem(output)})\n`
             }
 
             log('Editor found. Appending the output to the current cursor position', 'debug')
@@ -140,7 +139,23 @@ export const generateImages = async (
         }
     } catch (error) {
         log('Error while generating image(s) using Replicate.com', 'warn', error)
-        new Notice(`${MSG_IMAGE_GENERATION_ERROR}: [${String(error)}]`, NOTICE_TIMEOUT)
+        const errorMessage = error instanceof Error ? error.message : JSON.stringify(error)
+        new Notice(`${MSG_IMAGE_GENERATION_ERROR}: [${errorMessage}]`, NOTICE_TIMEOUT)
         return
     }
+}
+
+/**
+ * Stringify a single image-generation output item for embedding in a markdown image link.
+ * Replicate models return either string URLs or richer objects (e.g. `{ url: string }` from
+ * the streaming variants), so we narrow types here rather than relying on `String(value)`
+ * which would produce `[object Object]` for non-string outputs.
+ */
+function formatOutputItem(item: unknown): string {
+    if (typeof item === 'string') return item
+    if (item && typeof item === 'object' && 'url' in item) {
+        const url = (item as { url: unknown }).url
+        if (typeof url === 'string') return url
+    }
+    return JSON.stringify(item)
 }

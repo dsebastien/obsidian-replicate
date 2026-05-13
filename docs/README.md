@@ -16,10 +16,24 @@ Obsidian plugin that integrates [Replicate.com](https://replicate.com) and lets 
 - Optional: copy the generated output to the clipboard
 - Optional: append the generated output to the current note
 
+## Installation
+
+### From the Obsidian community catalog (recommended)
+
+1. In Obsidian, go to **Settings → Community plugins**.
+2. Disable **Restricted mode** if you have not already.
+3. Select **Browse**, search for **Replicate**, install it, and then enable it.
+
+### Manual installation
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from the latest [GitHub release](https://github.com/dsebastien/obsidian-replicate/releases).
+2. Copy them into `<YourVault>/.obsidian/plugins/replicate/` (create the folder if it does not exist).
+3. Reload Obsidian and enable the plugin in **Settings → Community plugins**.
+
 ## Quick start
 
 1. Create a Replicate API token at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
-2. Install and enable the plugin.
+2. Install and enable the plugin (see above).
 3. Open **Settings → Community plugins → Replicate** and paste your API key.
 4. In any note, select text (optional) and run the command **Generate image(s) using Replicate.com**.
 

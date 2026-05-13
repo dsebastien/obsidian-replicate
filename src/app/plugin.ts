@@ -30,11 +30,11 @@ export class ReplicatePlugin extends Plugin {
 
         // Add commands
         this.addCommand({
-            // eslint-disable-next-line obsidianmd/commands/no-plugin-id-in-command-id
+            // eslint-disable-next-line obsidianmd/commands/no-plugin-id-in-command-id -- 'replicate' here is the model provider name, not the plugin id; renaming would break existing keybindings
             id: 'generate-image-using-replicate',
             name: 'Generate image(s)',
-            callback: async () => {
-                await this.generateImages()
+            callback: () => {
+                void this.generateImages()
             }
         })
 
@@ -44,8 +44,8 @@ export class ReplicatePlugin extends Plugin {
                 menu.addSeparator()
                 menu.addItem((item) => {
                     item.setIcon('image')
-                    item.setTitle('Generate image(s) using Replicate.com').onClick(async () => {
-                        await this.generateImages(editor)
+                    item.setTitle('Generate image(s) using Replicate.com').onClick(() => {
+                        void this.generateImages(editor)
                     })
                 })
             })
