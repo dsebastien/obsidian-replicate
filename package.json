@@ -1,6 +1,6 @@
 {
     "name": "obsidian-replicate",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "description": "Use AI models with ease via the Replicate.com integration.",
     "author": {
         "name": "Sébastien Dubois",
