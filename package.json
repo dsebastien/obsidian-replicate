@@ -1,7 +1,7 @@
 {
     "name": "obsidian-replicate",
     "version": "1.0.3",
-    "description": "Replicate.com integration. Use AI models with ease",
+    "description": "Use AI models with ease via the Replicate.com integration.",
     "author": {
         "name": "Sébastien Dubois",
         "email": "sebastien@developassion.be",
@@ -29,10 +29,7 @@
         "npm": ">=10.1.0"
     },
     "main": "main.js",
-    "packageManager": "bun@1.3.2",
-    "lint-staged": {
-        "**/*": "prettier --write --ignore-unknown"
-    },
+    "packageManager": "bun@1.3.14",
     "config": {
         "commitizen": {
             "path": "node_modules/cz-customizable"
@@ -44,6 +41,7 @@
     "scripts": {
         "dev": "bun scripts/build.ts",
         "build": "bun run tsc && bun scripts/build.ts --prod",
+        "setup": "git config --local --replace-all include.path ../.gitconfig",
         "tsc": "tsc --noEmit",
         "tsc:watch": "tsc --noEmit --watch --preserveWatchOutput",
         "tscw": "bun run tsc:watch",
@@ -52,14 +50,12 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "test": "bun test",
-        "prepare": "husky",
         "commit": "cz",
         "cm": "cz",
         "commit:lint": "commitlint --edit",
         "release:update-version": "bun scripts/update-version.ts",
         "release:version-bump": "bun scripts/version-bump.ts",
         "release:changelog": "bun scripts/generate-changelog.ts",
-        "release:zip": "bun scripts/create-release-zip.ts",
         "release": "./scripts/release.sh",
         "validate": "bun run --parallel tsc test lint"
     },
@@ -77,8 +73,6 @@
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-obsidianmd": "0.1.9",
         "globals": "17.0.0",
-        "husky": "^9.1.7",
-        "lint-staged": "^16.2.7",
         "obsidian": "latest",
         "prettier": "^3.6.2",
         "tailwindcss": "4.1.17",
@@ -87,7 +81,6 @@
     },
     "dependencies": {
         "immer": "10.0.4",
-        "node-fetch": "3.3.2",
         "replicate": "0.32.0",
         "tslib": "2.4.0",
         "zod": "3.23.8"
