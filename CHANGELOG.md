@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1](https://github.com/dsebastien/obsidian-replicate/compare/1.1.0...1.1.1) (2026-07-17)
+
 ## [1.1.0](https://github.com/dsebastien/obsidian-replicate/compare/1.0.3...1.1.0) (2026-05-13)
 
 ### Features
@@ -15,4 +17,5 @@ All notable changes to this project will be documented in this file.
 ## 1.0.3
 
 Existing release. See [docs/release-notes.md](docs/release-notes.md) for details.
+
 
