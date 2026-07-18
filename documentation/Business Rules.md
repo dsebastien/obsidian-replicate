@@ -30,7 +30,7 @@ This document defines the core business rules for the Replicate plugin. These ru
 
 ## Stable identifiers
 
-**BR-007**: The plugin id (`replicate`) and the command id (`generate-image-using-replicate`) MUST NOT be renamed. They are part of the public API consumed by users and Obsidian's catalog.
+**BR-007**: The plugin id (`replicate`) MUST NOT be renamed — it is part of the public API consumed by users and Obsidian's catalog. The command id is `generate-images` (renamed from `generate-image-using-replicate` on 2026-07-18 with explicit user approval: the community-catalog reviewer forbids disabling the `obsidianmd/commands/no-plugin-id-in-command-id` rule, which fired because the old id contained the plugin id `replicate`). The command id MUST NOT be renamed again — doing so breaks any user-bound keyboard shortcut.
 
 ---
 

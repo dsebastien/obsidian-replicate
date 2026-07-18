@@ -18,11 +18,13 @@ Loaded and saved via `this.loadData()` / `this.saveData()` in `ReplicatePlugin`.
 
 ## Settings tab
 
-`src/app/settingTab/index.ts` renders the UI. Sections:
+`src/app/settingTab/index.ts` defines the UI declaratively via `getSettingDefinitions()` (Obsidian 1.13.0+; `minAppVersion` is `1.13.0`). Obsidian renders the tab and indexes it for settings search. Sections:
 
 - **General** — API key, copy-to-clipboard toggle, append-to-note toggle.
-- **Image Generation** — model id, model configuration JSON (debounced 500 ms; invalid JSON raises a Notice and preserves the raw string).
-- **Support** — follow button + Buy Me a Coffee image.
+- **Image generation** — model id, model configuration JSON textarea (invalid JSON is rejected inline by the control's `validate`; valid input is parsed to an object on save).
+- **Follow / Support** — X-follow button + Buy Me a Coffee image (`render` definitions).
+
+Values are read/written through overridden `getControlValue`/`setControlValue`, which go through `immer` + `plugin.saveSettings()` (the settings object is immutable, so the default in-place mutation can't be used). The model configuration is stored as an object but edited as pretty-printed JSON.
 
 ## Related
 

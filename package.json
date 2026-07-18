@@ -73,7 +73,7 @@
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-obsidianmd": "0.1.9",
         "globals": "17.0.0",
-        "obsidian": "latest",
+        "obsidian": "1.13.1",
         "prettier": "^3.6.2",
         "tailwindcss": "4.1.17",
         "typescript": "^5.9.3",
@@ -84,5 +84,9 @@
         "replicate": "0.32.0",
         "tslib": "2.4.0",
         "zod": "3.23.8"
+    },
+    "overrides": {
+        "tmp": "0.2.7",
+        "fast-uri": "4.1.0"
     }
 }

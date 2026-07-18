@@ -12,7 +12,7 @@ export class ReplicatePlugin extends Plugin {
     /**
      * The plugin settings are immutable
      */
-    settings: PluginSettings = produce(DEFAULT_SETTINGS, () => DEFAULT_SETTINGS)
+    override settings: PluginSettings = produce(DEFAULT_SETTINGS, () => DEFAULT_SETTINGS)
 
     /**
      * Executed as soon as the plugin loads
@@ -30,8 +30,7 @@ export class ReplicatePlugin extends Plugin {
 
         // Add commands
         this.addCommand({
-            // eslint-disable-next-line obsidianmd/commands/no-plugin-id-in-command-id -- 'replicate' here is the model provider name, not the plugin id; renaming would break existing keybindings
-            id: 'generate-image-using-replicate',
+            id: 'generate-images',
             name: 'Generate image(s)',
             callback: () => {
                 void this.generateImages()

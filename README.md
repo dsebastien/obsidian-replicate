@@ -75,6 +75,12 @@ Quick overview:
 - **Image generation model** — `<owner>/<name>` or `<owner>/<name>:<version>`.
 - **Image generation model configuration** — JSON passed as the model's `input`. The prompt is merged in at call time.
 
+## Privacy & data
+
+- **Network**: the plugin only contacts [Replicate.com](https://replicate.com). Requests are sent solely when you trigger a generation (command, context menu, or modal submit). Your prompt and model configuration are sent to Replicate to generate images. There is no telemetry, no background polling, and no auto-update.
+- **API key**: your Replicate API token is stored locally in the plugin's settings (your vault) and sent only to Replicate for authentication. It is never logged.
+- **Clipboard**: when **Copy output to clipboard** is enabled, the plugin writes the generated image URL(s) to your system clipboard. It never reads the clipboard. Disable the setting if you do not want clipboard writes.
+
 ## Tips and tricks
 
 See [docs/tips.md](docs/tips.md) for common tips, troubleshooting, and pointers for picking model versions.

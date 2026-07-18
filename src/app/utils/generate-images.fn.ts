@@ -154,7 +154,7 @@ export const generateImages = async (
 function formatOutputItem(item: unknown): string {
     if (typeof item === 'string') return item
     if (item && typeof item === 'object' && 'url' in item) {
-        const url = (item as { url: unknown }).url
+        const url = item.url
         if (typeof url === 'string') return url
     }
     return JSON.stringify(item)
