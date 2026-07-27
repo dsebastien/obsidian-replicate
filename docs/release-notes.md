@@ -1,5 +1,15 @@
 # Release Notes
 
+## 2.1.0 (2026-07-27)
+
+### Features
+
+- **plugin:** show a what's new dialog once after plugin updates
+
+### Bug Fixes
+
+- **plugin:** restore support for Obsidian releases older than 1.13
+
 ## 2.0.0 (2026-07-18)
 
 ### ⚠ BREAKING CHANGES

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0](https://github.com/dsebastien/obsidian-replicate/compare/2.0.0...2.1.0) (2026-07-27)
+
+### Features
+
+* **plugin:** show a what's new dialog once after plugin updates ([f70ec29](https://github.com/dsebastien/obsidian-replicate/commit/f70ec29c48166fea904a2594e402bafc87d08fe9))
+
+### Bug Fixes
+
+* **plugin:** restore support for Obsidian releases older than 1.13 ([ec64ac1](https://github.com/dsebastien/obsidian-replicate/commit/ec64ac1d68c512118c33216d837f5b5dac268a6a))
+
 ## [2.0.0](https://github.com/dsebastien/obsidian-replicate/compare/1.1.1...2.0.0) (2026-07-18)
 
 ### ⚠ BREAKING CHANGES
@@ -30,6 +40,7 @@ keyboard shortcut bound to it must be re-bound. minAppVersion is now
 ## 1.0.3
 
 Existing release. See [docs/release-notes.md](docs/release-notes.md) for details.
+
 
 
 
