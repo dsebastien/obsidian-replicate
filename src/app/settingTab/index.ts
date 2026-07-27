@@ -1,8 +1,16 @@
-import { type App, PluginSettingTab, type Setting, type SettingDefinitionItem } from 'obsidian'
+import {
+    type App,
+    debounce,
+    Notice,
+    PluginSettingTab,
+    Setting,
+    type SettingDefinitionItem
+} from 'obsidian'
 import { ReplicatePlugin } from '../plugin'
 import { type Draft, produce } from 'immer'
 import type { PluginSettings } from '../types/plugin-settings.intf'
 import { BUY_ME_A_COFFEE_BADGE_DATA_URL } from '../assets/buy-me-a-coffee'
+import { NOTICE_TIMEOUT } from '../constants'
 
 const JSON_OBJECT_ERROR = 'Enter a valid JSON object.'
 
@@ -132,6 +140,113 @@ export class SettingsTab extends PluginSettingTab {
             return JSON.stringify(this.plugin.settings.imageGenerationConfiguration, null, 2)
         }
         return super.getControlValue(key)
+    }
+
+    /**
+     * Imperative fallback for Obsidian < 1.13. Those versions do not know
+     * getSettingDefinitions() and call display() instead; Obsidian >= 1.13
+     * renders the declarative definitions (non-empty array) and never calls
+     * this. Values are read straight from the plugin settings and persisted
+     * through setControlValue() so both paths share the same write logic.
+     */
+    override display(): void {
+        const { containerEl } = this
+        containerEl.empty()
+
+        new Setting(containerEl).setName('Replicate.com API key').addText((text) => {
+            text.setValue(this.plugin.settings.apiKey).onChange(async (value) => {
+                await this.setControlValue('apiKey', value)
+            })
+        })
+
+        new Setting(containerEl)
+            .setName('Copy the generated output to the clipboard')
+            .setDesc('If enabled, the generated output will be copied to the clipboard.')
+            .addToggle((toggle) => {
+                toggle
+                    .setValue(this.plugin.settings.copyOutputToClipboard)
+                    .onChange(async (value) => {
+                        await this.setControlValue('copyOutputToClipboard', value)
+                    })
+            })
+
+        new Setting(containerEl)
+            .setName('Append the generated output to the current note')
+            .setDesc(
+                'If enabled, the generated output will be appended to the current note (if possible).'
+            )
+            .addToggle((toggle) => {
+                toggle
+                    .setValue(this.plugin.settings.appendOutputToCurrentNote)
+                    .onChange(async (value) => {
+                        await this.setControlValue('appendOutputToCurrentNote', value)
+                    })
+            })
+
+        new Setting(containerEl).setName('Image generation').setHeading()
+
+        new Setting(containerEl)
+            .setName('Image generation model')
+            .setDesc('The model that will be used to generate images.')
+            .addText((text) => {
+                text.setValue(this.plugin.settings.imageGenerationModel).onChange(
+                    async (value) => {
+                        await this.setControlValue('imageGenerationModel', value)
+                    }
+                )
+            })
+
+        new Setting(containerEl)
+            .setName('Image generation model configuration')
+            .setDesc('The image generation model configuration, passed as the model input.')
+            .addTextArea((text) => {
+                text.setPlaceholder('Valid JSON object')
+                text.setValue(
+                    JSON.stringify(this.plugin.settings.imageGenerationConfiguration, null, 2)
+                )
+                // Debounced so we do not parse/save on every keystroke
+                text.onChange(
+                    debounce(
+                        async (value: string) => {
+                            const trimmed = value.trim()
+                            if ('' !== trimmed) {
+                                try {
+                                    JSON.parse(trimmed)
+                                } catch {
+                                    new Notice(JSON_OBJECT_ERROR, NOTICE_TIMEOUT)
+                                    return
+                                }
+                            }
+                            await this.setControlValue('imageGenerationConfiguration', value)
+                        },
+                        500,
+                        true
+                    )
+                )
+            })
+
+        new Setting(containerEl)
+            .setName('Follow me on X')
+            .setDesc('@dSebastien')
+            .addButton((button) => {
+                button.setCta()
+                button.setButtonText('Follow me on X').onClick(() => {
+                    window.open('https://x.com/dSebastien')
+                })
+            })
+
+        new Setting(containerEl).setName('Support').setHeading()
+
+        const support = new Setting(containerEl)
+            .setName('Support this plugin')
+            .setDesc('Buy me a coffee to support the development of this plugin ❤️')
+        const linkEl = support.controlEl.createEl('a', {
+            href: 'https://www.buymeacoffee.com/dsebastien'
+        })
+        const imgEl = linkEl.createEl('img')
+        imgEl.src = BUY_ME_A_COFFEE_BADGE_DATA_URL
+        imgEl.alt = 'Buy me a coffee'
+        imgEl.width = 175
     }
 
     /**

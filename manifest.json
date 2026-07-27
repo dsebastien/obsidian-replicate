@@ -3,7 +3,7 @@
     "name": "Replicate",
     "description": "Use AI models with ease via the Replicate.com integration.",
     "version": "2.0.0",
-    "minAppVersion": "1.13.0",
+    "minAppVersion": "0.15.0",
     "isDesktopOnly": true,
     "author": "Sébastien Dubois",
     "authorUrl": "https://dsebastien.net",

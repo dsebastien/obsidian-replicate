@@ -15,7 +15,7 @@ Obsidian plugin that integrates Replicate.com for AI image generation.
 
 ## Settings UI
 
-- `src/app/settingTab/index.ts` — `SettingsTab extends PluginSettingTab`. Declarative settings via `getSettingDefinitions()` (Obsidian 1.13.0+): API key, output toggles (clipboard, append), model identifier, model configuration JSON textarea, follow/support rows. Overrides `getControlValue`/`setControlValue` to write back through `immer` + `plugin.saveSettings()`.
+- `src/app/settingTab/index.ts` — `SettingsTab extends PluginSettingTab`. Declarative settings via `getSettingDefinitions()` (Obsidian 1.13.0+) with an imperative `display()` fallback for older versions: API key, output toggles (clipboard, append), model identifier, model configuration JSON textarea, follow/support rows. Overrides `getControlValue`/`setControlValue` to write back through `immer` + `plugin.saveSettings()`.
 
 ## Prompt modal
 
