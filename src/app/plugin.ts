@@ -1,3 +1,4 @@
+import { registerWhatsNewDialog } from './whats-new'
 import { type Editor, Notice, Plugin } from 'obsidian'
 import { DEFAULT_SETTINGS, type PluginSettings } from './types/plugin-settings.intf'
 import { SettingsTab } from './settingTab'
@@ -18,6 +19,8 @@ export class ReplicatePlugin extends Plugin {
      * Executed as soon as the plugin loads
      */
     override async onload() {
+        // Must run before anything can call saveData (fresh-install detection)
+        registerWhatsNewDialog(this)
         log('Initializing', 'debug')
         await this.loadSettings()
 

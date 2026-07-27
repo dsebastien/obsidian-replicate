@@ -80,6 +80,7 @@ Quick overview:
 - **Network**: the plugin only contacts [Replicate.com](https://replicate.com). Requests are sent solely when you trigger a generation (command, context menu, or modal submit). Your prompt and model configuration are sent to Replicate to generate images. There is no telemetry, no background polling, and no auto-update.
 - **API key**: your Replicate API token is stored locally in the plugin's settings (your vault) and sent only to Replicate for authentication. It is never logged.
 - **Clipboard**: when **Copy output to clipboard** is enabled, the plugin writes the generated image URL(s) to your system clipboard. It never reads the clipboard. Disable the setting if you do not want clipboard writes.
+- **What's new after updates.** After a plugin update, a one-time dialog shows the release notes you just received (including skipped versions) with ways to support development. Never shown on fresh installs or regular restarts.
 
 ## Tips and tricks
 

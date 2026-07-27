@@ -189,11 +189,9 @@ export class SettingsTab extends PluginSettingTab {
             .setName('Image generation model')
             .setDesc('The model that will be used to generate images.')
             .addText((text) => {
-                text.setValue(this.plugin.settings.imageGenerationModel).onChange(
-                    async (value) => {
-                        await this.setControlValue('imageGenerationModel', value)
-                    }
-                )
+                text.setValue(this.plugin.settings.imageGenerationModel).onChange(async (value) => {
+                    await this.setControlValue('imageGenerationModel', value)
+                })
             })
 
         new Setting(containerEl)
