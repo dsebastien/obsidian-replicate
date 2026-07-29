@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0](https://github.com/dsebastien/obsidian-replicate/compare/2.2.0...2.3.0) (2026-07-29)
+
+### Features
+
+* **plugin:** aggregate what's new dialogs across simultaneously updated plugins ([e3aaffd](https://github.com/dsebastien/obsidian-replicate/commit/e3aaffd1c3b42fb18fae669490cd2efe9966483d))
+
 ## [2.2.0](https://github.com/dsebastien/obsidian-replicate/compare/2.1.0...2.2.0) (2026-07-29)
 
 ### Features
@@ -46,6 +52,7 @@ keyboard shortcut bound to it must be re-bound. minAppVersion is now
 ## 1.0.3
 
 Existing release. See [docs/release-notes.md](docs/release-notes.md) for details.
+
 
 
 
