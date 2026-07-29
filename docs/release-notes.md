@@ -1,5 +1,11 @@
 # Release Notes
 
+## 2.2.0 (2026-07-29)
+
+### Features
+
+- **plugin:** add Knowii community to the what's new dialog and harden it
+
 ## 2.1.0 (2026-07-27)
 
 ### Features

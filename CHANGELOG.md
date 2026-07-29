@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0](https://github.com/dsebastien/obsidian-replicate/compare/2.1.0...2.2.0) (2026-07-29)
+
+### Features
+
+* **plugin:** add Knowii community to the what's new dialog and harden it ([80512e9](https://github.com/dsebastien/obsidian-replicate/commit/80512e9243c010a115ba1a008a3a1324ff633bea))
+
 ## [2.1.0](https://github.com/dsebastien/obsidian-replicate/compare/2.0.0...2.1.0) (2026-07-27)
 
 ### Features
@@ -40,6 +46,7 @@ keyboard shortcut bound to it must be re-bound. minAppVersion is now
 ## 1.0.3
 
 Existing release. See [docs/release-notes.md](docs/release-notes.md) for details.
+
 
 
 
