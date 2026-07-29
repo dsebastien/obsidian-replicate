@@ -10,6 +10,14 @@ import { ReplicatePlugin } from '../plugin'
 import { type Draft, produce } from 'immer'
 import type { PluginSettings } from '../types/plugin-settings.intf'
 import { BUY_ME_A_COFFEE_BADGE_DATA_URL } from '../assets/buy-me-a-coffee'
+import {
+    BUY_ME_A_COFFEE_URL,
+    GITHUB_SPONSORS_URL,
+    KNOWII_COMMUNITY_URL,
+    NEWSLETTER_URL,
+    renderSupportSection,
+    YOUTUBE_CHANNEL_URL
+} from '../ui/support-links'
 import { NOTICE_TIMEOUT } from '../constants'
 
 const JSON_OBJECT_ERROR = 'Enter a valid JSON object.'
@@ -114,11 +122,46 @@ export class SettingsTab extends PluginSettingTab {
                 heading: 'Support',
                 items: [
                     {
-                        name: 'Support this plugin',
-                        desc: 'Buy me a coffee to support the development of this plugin ❤️',
+                        name: 'Join the Knowii community',
+                        desc: 'Learn to organize your notes and put your knowledge to work, together with fellow knowledge workers.',
                         render: (setting: Setting): void => {
+                            setting.addButton((button) => {
+                                button
+                                    .setCta()
+                                    .setButtonText('Join Knowii')
+                                    .onClick(() => {
+                                        window.open(KNOWII_COMMUNITY_URL)
+                                    })
+                            })
+                        }
+                    },
+                    {
+                        name: 'Stay in touch',
+                        desc: 'Obsidian, Personal Knowledge Management and note-taking, straight to your inbox and feed.',
+                        render: (setting: Setting): void => {
+                            setting.addButton((button) => {
+                                button.setButtonText('Newsletter').onClick(() => {
+                                    window.open(NEWSLETTER_URL)
+                                })
+                            })
+                            setting.addButton((button) => {
+                                button.setButtonText('YouTube').onClick(() => {
+                                    window.open(YOUTUBE_CHANNEL_URL)
+                                })
+                            })
+                        }
+                    },
+                    {
+                        name: 'Support this plugin',
+                        desc: 'Your support keeps development and maintenance going ❤️',
+                        render: (setting: Setting): void => {
+                            setting.addButton((button) => {
+                                button.setButtonText('GitHub Sponsors').onClick(() => {
+                                    window.open(GITHUB_SPONSORS_URL)
+                                })
+                            })
                             const linkEl = setting.controlEl.createEl('a', {
-                                href: 'https://www.buymeacoffee.com/dsebastien'
+                                href: BUY_ME_A_COFFEE_URL
                             })
                             const imgEl = linkEl.createEl('img')
                             imgEl.src = BUY_ME_A_COFFEE_BADGE_DATA_URL
@@ -233,18 +276,15 @@ export class SettingsTab extends PluginSettingTab {
                 })
             })
 
-        new Setting(containerEl).setName('Support').setHeading()
-
-        const support = new Setting(containerEl)
-            .setName('Support this plugin')
-            .setDesc('Buy me a coffee to support the development of this plugin ❤️')
-        const linkEl = support.controlEl.createEl('a', {
-            href: 'https://www.buymeacoffee.com/dsebastien'
+        renderSupportSection(containerEl, (el) => {
+            const linkEl = el.createEl('a', {
+                href: BUY_ME_A_COFFEE_URL
+            })
+            const imgEl = linkEl.createEl('img')
+            imgEl.src = BUY_ME_A_COFFEE_BADGE_DATA_URL
+            imgEl.alt = 'Buy me a coffee'
+            imgEl.width = 175
         })
-        const imgEl = linkEl.createEl('img')
-        imgEl.src = BUY_ME_A_COFFEE_BADGE_DATA_URL
-        imgEl.alt = 'Buy me a coffee'
-        imgEl.width = 175
     }
 
     /**
