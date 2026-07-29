@@ -73,12 +73,16 @@ export function createWhatsNewViewCreator(
             this.contentEl.addClass(`${prefix}-whats-new-content`)
             this.contentEl.empty()
 
-            this.contentEl.createEl('h2', {
+            // Single wrapper holds the readable measure. Centering each child
+            // instead would break as soon as a child sets a margin shorthand.
+            const bodyEl = this.contentEl.createDiv({ cls: `${prefix}-whats-new-body` })
+
+            bodyEl.createEl('h2', {
                 cls: `${prefix}-whats-new-title`,
                 text: getWhatsNewTitle(entry.pluginName, entry.version)
             })
 
-            const notesEl = this.contentEl.createDiv({
+            const notesEl = bodyEl.createDiv({
                 cls: `markdown-rendered ${prefix}-whats-new-notes`
             })
             const markdown =
@@ -87,7 +91,7 @@ export function createWhatsNewViewCreator(
                     : `Updated to version ${entry.version}.`
             await MarkdownRenderer.render(this.app, markdown, notesEl, '', this)
 
-            const linksEl = this.contentEl.createDiv({ cls: `${prefix}-whats-new-links` })
+            const linksEl = bodyEl.createDiv({ cls: `${prefix}-whats-new-links` })
 
             new Setting(linksEl)
                 .setName('Join the Knowii community')
