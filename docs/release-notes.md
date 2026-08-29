@@ -1,5 +1,16 @@
 # Release Notes
 
+## 2.4.0 (2026-08-29)
+
+### Features
+
+- **plugin:** show what's new in a tab instead of a modal dialog
+- **plugin:** surface support CTAs everywhere users can see them
+
+### Bug Fixes
+
+- **build:** align with the catalog reviewer's archive, ruleset and audit
+
 ## 2.3.0 (2026-07-29)
 
 ### Features

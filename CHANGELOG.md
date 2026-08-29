@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0](https://github.com/dsebastien/obsidian-replicate/compare/2.3.0...2.4.0) (2026-08-29)
+
+### Features
+
+* **plugin:** show what's new in a tab instead of a modal dialog ([988d497](https://github.com/dsebastien/obsidian-replicate/commit/988d4977e3e986633e9af427b26409c1c45fba39))
+* **plugin:** surface support CTAs everywhere users can see them ([f855ce4](https://github.com/dsebastien/obsidian-replicate/commit/f855ce4c88ee7c51fa44e4171f5bd7235802ec86))
+
+### Bug Fixes
+
+* **build:** align with the catalog reviewer's archive, ruleset and audit ([e3f5cc0](https://github.com/dsebastien/obsidian-replicate/commit/e3f5cc0603cd704b9bc4a854046812cad6511cae))
+
 ## [2.3.0](https://github.com/dsebastien/obsidian-replicate/compare/2.2.0...2.3.0) (2026-07-29)
 
 ### Features
@@ -52,6 +63,7 @@ keyboard shortcut bound to it must be re-bound. minAppVersion is now
 ## 1.0.3
 
 Existing release. See [docs/release-notes.md](docs/release-notes.md) for details.
+
 
 
 
