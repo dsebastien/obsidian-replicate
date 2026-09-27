@@ -25,5 +25,9 @@ void mock.module('obsidian', () => ({
     AbstractInputSuggest: class AbstractInputSuggest {},
     SearchComponent: class SearchComponent {},
     debounce: (fn: (...args: unknown[]) => unknown) => fn,
+    ItemView: class ItemView {},
+    MarkdownRenderer: class MarkdownRenderer {},
+    requestUrl: () => {},
+    Modal: class Modal {},
     setIcon: () => {}
 }))

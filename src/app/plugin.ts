@@ -107,14 +107,15 @@ export class ReplicatePlugin extends Plugin {
                 needToSaveSettings = true
             }
 
-            if (loadedSettings.copyOutputToClipboard) {
+            // A boolean: `false` is a stored choice, not a missing value
+            if (typeof loadedSettings.copyOutputToClipboard === 'boolean') {
                 draft.copyOutputToClipboard = loadedSettings.copyOutputToClipboard
             } else {
                 log('The loaded settings miss the [copyOutputToClipboard] property', 'debug')
                 needToSaveSettings = true
             }
 
-            if (loadedSettings.appendOutputToCurrentNote) {
+            if (typeof loadedSettings.appendOutputToCurrentNote === 'boolean') {
                 draft.appendOutputToCurrentNote = loadedSettings.appendOutputToCurrentNote
             } else {
                 log('The loaded settings miss the [appendOutputToCurrentNote] property', 'debug')
