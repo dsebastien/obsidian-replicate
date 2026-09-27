@@ -137,7 +137,7 @@ export class SettingsTab extends PluginSettingTab {
                     },
                     {
                         name: 'Stay in touch',
-                        desc: 'Obsidian, Personal Knowledge Management and note-taking, straight to your inbox and feed.',
+                        desc: 'Obsidian, personal knowledge management and note-taking, straight to your inbox and feed.',
                         render: (setting: Setting): void => {
                             setting.addButton((button) => {
                                 button.setButtonText('Newsletter').onClick(() => {
