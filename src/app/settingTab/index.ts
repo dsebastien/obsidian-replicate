@@ -29,7 +29,7 @@ const JSON_OBJECT_ERROR = 'Enter a valid JSON object.'
  */
 function parseJsonObject(raw: string): object {
     const parsed: unknown = JSON.parse(raw)
-    if (parsed !== null && typeof parsed === 'object') {
+    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
         return parsed
     }
     return {}
@@ -97,7 +97,11 @@ export class SettingsTab extends PluginSettingTab {
                                 } catch {
                                     return JSON_OBJECT_ERROR
                                 }
-                                if (null === parsed || 'object' !== typeof parsed) {
+                                if (
+                                    null === parsed ||
+                                    'object' !== typeof parsed ||
+                                    Array.isArray(parsed)
+                                ) {
                                     return JSON_OBJECT_ERROR
                                 }
                             }
