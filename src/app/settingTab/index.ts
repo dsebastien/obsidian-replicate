@@ -177,12 +177,27 @@ export class SettingsTab extends PluginSettingTab {
     /**
      * Read a control's current value. The image generation configuration is
      * stored as an object but edited as pretty-printed JSON.
+     *
+     * Every key is read here rather than through super.getControlValue(),
+     * which only exists from Obsidian 1.13: this class also serves older
+     * versions through display(), so it calls no 1.13-only member itself.
      */
     override getControlValue(key: string): unknown {
-        if ('imageGenerationConfiguration' === key) {
-            return JSON.stringify(this.plugin.settings.imageGenerationConfiguration, null, 2)
+        const settings = this.plugin.settings
+        switch (key) {
+            case 'apiKey':
+                return settings.apiKey
+            case 'copyOutputToClipboard':
+                return settings.copyOutputToClipboard
+            case 'appendOutputToCurrentNote':
+                return settings.appendOutputToCurrentNote
+            case 'imageGenerationModel':
+                return settings.imageGenerationModel
+            case 'imageGenerationConfiguration':
+                return JSON.stringify(settings.imageGenerationConfiguration, null, 2)
+            default:
+                return undefined
         }
-        return super.getControlValue(key)
     }
 
     /**
