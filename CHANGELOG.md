@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0](https://github.com/dsebastien/obsidian-replicate/compare/2.4.0...2.5.0) (2026-09-27)
+
+### Features
+
+* **build:** fail the build on a lockfile the catalog review cannot parse ([fdfe3a8](https://github.com/dsebastien/obsidian-replicate/commit/fdfe3a8f3229c31221b7d6d65e2579a61ac9ebcb))
+* **build:** make the rule floor check that it is still wired in ([2a0aaef](https://github.com/dsebastien/obsidian-replicate/commit/2a0aaef887f235dc1a3a1d69ab60ac013c1269bf))
+* **build:** refuse commits that loosen the rules instead of fixing the finding ([c4bd338](https://github.com/dsebastien/obsidian-replicate/commit/c4bd33802cd7b18c4e82381b5c8a026cea0cd38a))
+
+### Bug Fixes
+
+* **build:** exclude bun-types alongside @types/bun from the release-age gate ([6a7563e](https://github.com/dsebastien/obsidian-replicate/commit/6a7563e45c03f8439aadc30cac842135525b2ecf))
+* **build:** harden the release path from the template ([49a627a](https://github.com/dsebastien/obsidian-replicate/commit/49a627afc8516c1270c61fbd0c1641df8778fbfd))
+* **build:** rebuild versions.json from the published releases ([82929be](https://github.com/dsebastien/obsidian-replicate/commit/82929be3e39f8ade6ba18184323ca44f80f39303))
+* **deps:** move the fast-uri override off the vulnerable 4.x line ([05befe7](https://github.com/dsebastien/obsidian-replicate/commit/05befe7f591363f4e7f77eafff0dea0b8571ade1))
+* **plugin:** keep a switched-off toggle off across restarts ([a2f32c4](https://github.com/dsebastien/obsidian-replicate/commit/a2f32c476ade4c2511d2887e75e7cf59c4126420))
+* **plugin:** lowercase the newsletter line ([f8e2e5d](https://github.com/dsebastien/obsidian-replicate/commit/f8e2e5dde785c9049e2dc8b0c200d9b418a84f92))
+* **plugin:** read settings controls without the 1.13-only super call ([8c7b828](https://github.com/dsebastien/obsidian-replicate/commit/8c7b828dc944595d553dfc5ef747f6f182d98d0a))
+* **plugin:** refuse a JSON array as the image generation configuration ([c42dc1e](https://github.com/dsebastien/obsidian-replicate/commit/c42dc1e6d23b066cfa098729b666710c21784e5c))
+
 ## [2.4.0](https://github.com/dsebastien/obsidian-replicate/compare/2.3.0...2.4.0) (2026-08-29)
 
 ### Features
@@ -63,6 +82,7 @@ keyboard shortcut bound to it must be re-bound. minAppVersion is now
 ## 1.0.3
 
 Existing release. See [docs/release-notes.md](docs/release-notes.md) for details.
+
 
 
 
