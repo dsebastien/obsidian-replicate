@@ -1,6 +1,6 @@
 import { registerWhatsNewView } from './whats-new'
 import { type Editor, Notice, Plugin } from 'obsidian'
-import { DEFAULT_SETTINGS, type PluginSettings } from './types/plugin-settings.intf'
+import { createDefaultSettings, type PluginSettings } from './types/plugin-settings.intf'
 import { SettingsTab } from './settingTab'
 import { log } from './utils/log'
 import { type Draft, produce } from 'immer'
@@ -13,7 +13,7 @@ export class ReplicatePlugin extends Plugin {
     /**
      * The plugin settings are immutable
      */
-    override settings: PluginSettings = produce(DEFAULT_SETTINGS, () => DEFAULT_SETTINGS)
+    override settings: PluginSettings = produce(createDefaultSettings(), () => {})
 
     /**
      * Executed as soon as the plugin loads
@@ -89,11 +89,10 @@ export class ReplicatePlugin extends Plugin {
      */
     async loadSettings() {
         log('Loading settings', 'debug')
-        let loadedSettings = (await this.loadData()) as PluginSettings
+        const loadedSettings = (await this.loadData()) as PluginSettings
 
         if (!loadedSettings) {
             log('Using default settings', 'debug')
-            loadedSettings = produce(DEFAULT_SETTINGS, () => DEFAULT_SETTINGS)
             return
         }
 
