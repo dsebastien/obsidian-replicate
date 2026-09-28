@@ -209,7 +209,7 @@ src/
     settingTab/
       index.ts                       # Settings UI
     types/
-      plugin-settings.intf.ts        # PluginSettings interface + DEFAULT_SETTINGS
+      plugin-settings.intf.ts        # PluginSettings, createDefaultSettings() + DEFAULT_SETTINGS (reads only)
       replicate-run-model-configuration.intf.ts
     utils/
       generate-images.fn.ts          # Main Replicate call + output handling
@@ -255,6 +255,7 @@ These rules apply to **`id`**, **`name`**, and **`description`** in `manifest.js
 - Any user-facing commands should be added via `this.addCommand(...)`.
 - If the plugin has configuration, provide a settings tab and sensible defaults.
 - Persist settings using `this.loadData()` / `this.saveData()`.
+- Never `produce()` from the shared `DEFAULT_SETTINGS`: Immer deep-freezes what `produce` returns, including every subtree it shares with its base, so the exported constant (nested values too) stays frozen for the rest of the process. Produce from `createDefaultSettings()` (deep-fresh, never a spread of `DEFAULT_SETTINGS`) and keep `DEFAULT_SETTINGS` for reads. The `test` script runs `bun test --isolate`, which hides the freeze from `validate` and CI: only the `Object.isFrozen` assertions in `src/app/load-settings.spec.ts` catch it.
 - Use stable command IDs; avoid renaming once released. Current command id: `generate-image-using-replicate`.
 - The command `name` must not include the plugin name — Obsidian already prefixes commands with the plugin name in the palette. If you need to rebrand, **rename `name`, not `id`** (renaming an id breaks any user-bound keyboard shortcut). Grep `docs/` and `README.md` for old command names when renaming.
 - File pickers in settings tabs: never hand-roll. Use `AbstractInputSuggest` for inline autocomplete and `FuzzySuggestModal` for a browse-button modal — both cover keyboard nav, theming, and popout-window correctness for free. Hand-rolled menus accumulate inline-style + `document.createElement` lint warnings fast.
