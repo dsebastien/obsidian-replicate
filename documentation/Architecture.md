@@ -10,12 +10,13 @@ Obsidian plugin that integrates Replicate.com for AI image generation.
 
 - `src/app/plugin.ts` — `ReplicatePlugin extends Plugin`
     - `onload()` loads settings, registers the settings tab, the `generate-images` command, and an `editor-menu` context menu entry.
-    - `generateImages(editor?)` — orchestrates input collection (selection > modal prompt) and delegates to the utility.
-    - `loadSettings()` / `saveSettings()` — persist via `loadData()` / `saveData()`. Uses `immer` to keep settings immutable.
+    - `generateImages(editor?)` — resolves the API key (`resolveApiKey()`), orchestrates input collection (selection > modal prompt) and delegates to the utility.
+    - `loadSettings()` / `saveSettings()` — persist via `loadData()` / `saveData()`. Uses `immer` to keep settings immutable. `loadSettings()` runs the per-device API key migration (BR-008).
+    - API key: `resolveApiKey()` (secret storage first, legacy plaintext fallback + bootstrap), `setApiKeySecretName()`, `clearApiKey()`, `removeLegacyApiKey()`, `hasLegacyApiKey()`. The legacy plaintext lives in a private field, never in `settings`; `saveSettings()` writes it back unchanged during the grace period.
 
 ## Settings UI
 
-- `src/app/settingTab/index.ts` — `SettingsTab extends PluginSettingTab`. Declarative settings via `getSettingDefinitions()` (Obsidian 1.13.0+) with an imperative `display()` fallback for older versions: API key, output toggles (clipboard, append), model identifier, model configuration JSON textarea, follow/support rows. Overrides `getControlValue`/`setControlValue` to write back through `immer` + `plugin.saveSettings()`.
+- `src/app/settingTab/index.ts` — `SettingsTab extends PluginSettingTab`. Declarative settings via `getSettingDefinitions()` (Obsidian 1.13.0+) with an imperative `display()` fallback for older versions: API key (`SecretComponent` + **Clear** button), **Remove plain-text copy now** button, output toggles (clipboard, append), model identifier, model configuration JSON textarea, follow/support rows. Overrides `getControlValue`/`setControlValue` to write back through `immer` + `plugin.saveSettings()`.
 
 ## Prompt modal
 
@@ -31,7 +32,7 @@ Obsidian plugin that integrates Replicate.com for AI image generation.
 
 ## Utility helpers
 
-- `src/app/utils/is-api-key-configured.fn.ts` — guards against empty API key.
+- `src/app/utils/api-key-secret.fn.ts` — Obsidian SecretStorage helpers: `getApiKey`, first migration `migrateLegacyApiKey` (suffixed name on conflict), per-device `bootstrapSecretFromLegacy`, `clearSecret`, `isLegacyGracePeriodOver` (60 days), `apiKeyMissingMessage`. `mock-secret-store.ts` is the test double.
 - `src/app/utils/is-image-generation-model-configured.fn.ts` — guards against empty model id.
 - `src/app/utils/log.ts` — prefixed console logger with levels (`debug`, `warn`). Never log the API key.
 
@@ -41,7 +42,7 @@ Obsidian plugin that integrates Replicate.com for AI image generation.
 User trigger (command / editor-menu / selection)
   → ReplicatePlugin.generateImages
     → PromptModal (if no selection) or direct prompt
-      → generateImages(prompt, settings, app)
+      → generateImages(prompt, apiKey, settings, app)   (apiKey from SecretStorage, read at use time)
         → getReplicateClient(apiKey)
         → replicate.run(imageGenerationModel, { input: {...config, prompt} })
         → output handling:

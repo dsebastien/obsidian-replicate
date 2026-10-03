@@ -214,8 +214,9 @@ src/
     utils/
       generate-images.fn.ts          # Main Replicate call + output handling
       get-replicate-client.fn.ts     # Replicate client helper
-      is-api-key-configured.fn.ts
-      is-api-key-configured.fn.spec.ts
+      api-key-secret.fn.ts           # SecretStorage helpers + legacy plaintext migration (BR-008)
+      api-key-secret.fn.spec.ts
+      mock-secret-store.ts           # In-memory SecretStorage for tests
       is-image-generation-model-configured.fn.ts
       log.ts
   assets/

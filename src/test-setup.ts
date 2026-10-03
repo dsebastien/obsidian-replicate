@@ -19,6 +19,7 @@ void mock.module('obsidian', () => ({
     Plugin: class Plugin {},
     PluginSettingTab: class PluginSettingTab {},
     Setting: class Setting {},
+    SecretComponent: class SecretComponent {},
     MarkdownView: class MarkdownView {},
     TAbstractFile: class TAbstractFile {},
     TFolder: class TFolder {},

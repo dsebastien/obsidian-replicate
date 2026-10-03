@@ -48,7 +48,7 @@ If the plugin isn't listed in the community catalog yet (or you want a specific 
 
 1. Create a Replicate API token at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
 2. Install and enable the plugin (see above).
-3. Open **Settings → Community plugins → Replicate** and paste your API key.
+3. Open **Settings → Community plugins → Replicate** and, under **Replicate.com API key**, create a secret holding your API token (or pick an existing one).
 4. In any note, select text (optional) and run the command **Generate image(s) using Replicate.com**.
 
 > ⚠️ Images generated via Replicate are only stored on Replicate's servers for **one hour**. Download anything you want to keep.

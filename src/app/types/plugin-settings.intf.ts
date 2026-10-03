@@ -1,6 +1,19 @@
+import { DEFAULT_API_KEY_SECRET_NAME } from '../utils/api-key-secret.fn'
+
 export interface PluginSettings {
     // General
-    apiKey: string
+    /**
+     * Name of the Obsidian secret (SecretStorage, device-local) holding the
+     * Replicate.com API key. Only the name is persisted in data.json, never
+     * the key itself.
+     */
+    apiKeySecretName: string
+    /**
+     * ISO date of the first migration of the legacy plaintext `apiKey` to
+     * secret storage. The plaintext copy is purged from data.json once the
+     * grace period has passed. Empty when there never was one.
+     */
+    legacySecretMigratedAt: string
     copyOutputToClipboard: boolean
     appendOutputToCurrentNote: boolean
 
@@ -22,7 +35,8 @@ export interface PluginSettings {
 export function createDefaultSettings(): PluginSettings {
     return {
         // General
-        apiKey: '',
+        apiKeySecretName: DEFAULT_API_KEY_SECRET_NAME,
+        legacySecretMigratedAt: '',
         copyOutputToClipboard: false,
         appendOutputToCurrentNote: true,
 
@@ -60,6 +74,14 @@ export function createDefaultSettings(): PluginSettings {
             disable_safety_checker: true
         }
     }
+}
+
+/**
+ * The on-disk shape before secret storage: the API key was stored in plaintext in
+ * data.json. Legacy format, read only by the migration.
+ */
+export interface LegacyPluginSettings extends Partial<PluginSettings> {
+    apiKey?: unknown
 }
 
 /** The defaults, for reading and comparing. Never produce from it. */

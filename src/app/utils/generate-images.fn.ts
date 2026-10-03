@@ -7,7 +7,6 @@ import {
     MSG_IMAGE_GENERATION_MODEL_CONFIGURATION_REQUIRED,
     NOTICE_TIMEOUT
 } from '../constants'
-import { isApiKeyConfigured } from './is-api-key-configured.fn'
 import { isImageGenerationModelConfigured } from './is-image-generation-model-configured.fn'
 import { getReplicateClient } from './get-replicate-client.fn'
 import type { ReplicateRunModelConfiguration } from '../types/replicate-run-model-configuration.intf'
@@ -15,15 +14,17 @@ import type { ReplicateRunModelConfiguration } from '../types/replicate-run-mode
 /**
  * Generate images using Replicate.com
  * @param prompt - The prompt to use
+ * @param apiKey - The Replicate.com API key, resolved by the caller at use time
  * @param settings - The plugin settings
  * @param app - The Obsidian app
  */
 export const generateImages = async (
     prompt: string,
+    apiKey: string,
     settings: PluginSettings,
     app: App
 ): Promise<void> => {
-    if (!isApiKeyConfigured(settings)) {
+    if ('' === apiKey.trim()) {
         log(
             'Cannot generate images because the Replicate.com API Key has not been configured',
             'warn'
@@ -38,7 +39,7 @@ export const generateImages = async (
         return
     }
 
-    const replicate = getReplicateClient(settings.apiKey)
+    const replicate = getReplicateClient(apiKey)
 
     log('Generating images for prompt: ', 'debug', prompt)
     new Notice(

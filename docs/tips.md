@@ -44,7 +44,7 @@ Workarounds:
 
 ### "Replicate.com API Key is required"
 
-Paste your API token in the settings tab. Create one at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
+Set your API token in the settings tab: under **Replicate.com API key**, select or create a secret holding it. Secrets are stored per device, so a device that never ran the plugin needs it once. Create a token at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens).
 
 ### Model not found / invalid model
 

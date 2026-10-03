@@ -12,6 +12,8 @@ This document defines the core business rules for the Replicate plugin. These ru
 
 **BR-002**: The Replicate API key is secret. It MUST NEVER be logged, included in Notice text, committed, or sent to any destination other than Replicate.com's own API. When logging or surfacing errors, ensure the key cannot leak through stringified objects.
 
+**BR-008**: The API key lives in Obsidian's SecretStorage (device-local, `minAppVersion` >= 1.11.4); data.json stores only the secret name (`apiKeySecretName`, default `replicate-api-key`). New or changed key values are NEVER written to data.json. The legacy plaintext `apiKey` is a read-only, per-device bootstrap source: on every load and read, a device whose secret is absent (`''` = absent, there is no delete API) copies it into its secret, so every synced device stays configured with zero action. The first migration records `legacySecretMigratedAt` and never overwrites a different existing secret (suffixed name instead). The legacy copy is removed after 60 days, via **Remove plain-text copy now**, when the secret is changed to a different value (stale), or by **Clear** (which also empties this device's secret). Only when both the secret and the legacy copy are empty does the plugin ask the user to set the secret on this device.
+
 ## Respect output handling flags
 
 **BR-003**: The `copyOutputToClipboard` and `appendOutputToCurrentNote` settings are authoritative. Generated output is only written to those destinations when the respective flag is enabled. When both are disabled, the user still sees a success notice but the plugin performs no clipboard or editor mutation.

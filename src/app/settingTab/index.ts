@@ -3,6 +3,7 @@ import {
     debounce,
     Notice,
     PluginSettingTab,
+    SecretComponent,
     Setting,
     type SettingDefinitionItem
 } from 'obsidian'
@@ -19,6 +20,10 @@ import {
     YOUTUBE_CHANNEL_URL
 } from '../ui/support-links'
 import { NOTICE_TIMEOUT } from '../constants'
+import { LEGACY_API_KEY_GRACE_PERIOD_DAYS } from '../utils/api-key-secret.fn'
+
+const LEGACY_COPY_PRESENT_DESC = `Older versions kept your API key in plain text in this vault's plugin data, which syncs with your vault. Each device copies it into its own secret storage on its next start, then the plain-text copy is removed automatically after ${LEGACY_API_KEY_GRACE_PERIOD_DAYS} days. Remove it now once all your devices run this version.`
+const LEGACY_COPY_ABSENT_DESC = 'No plain-text copy of your API key is left in this vault.'
 
 const JSON_OBJECT_ERROR = 'Enter a valid JSON object.'
 
@@ -55,7 +60,15 @@ export class SettingsTab extends PluginSettingTab {
                 items: [
                     {
                         name: 'Replicate.com API key',
-                        control: { type: 'text', key: 'apiKey' }
+                        render: (setting: Setting): void => {
+                            this.renderApiKeySetting(setting)
+                        }
+                    },
+                    {
+                        name: 'Remove plain-text copy now',
+                        render: (setting: Setting): void => {
+                            this.renderLegacyCopySetting(setting)
+                        }
                     },
                     {
                         name: 'Copy the generated output to the clipboard',
@@ -179,6 +192,60 @@ export class SettingsTab extends PluginSettingTab {
     }
 
     /**
+     * The API key lives in Obsidian's secret storage (device-local). The
+     * SecretComponent lets the user pick or create a secret and hands back its
+     * NAME; only that name is persisted in data.json. Shared by both the
+     * declarative and the display() paths.
+     */
+    private renderApiKeySetting(setting: Setting): void {
+        const describe = (): void => {
+            setting.setDesc(
+                null !== this.plugin.resolveApiKey()
+                    ? 'Stored in secret storage on this device, never in your vault.'
+                    : 'Not set on this device. Select or create a secret holding your Replicate.com API token. Secrets are stored per device, so set it once on each device.'
+            )
+        }
+        describe()
+        setting.addComponent((el) =>
+            new SecretComponent(this.app, el)
+                .setValue(this.plugin.settings.apiKeySecretName)
+                .onChange(async (value) => {
+                    await this.setControlValue('apiKeySecretName', value)
+                    describe()
+                })
+        )
+        setting.addButton((button) => {
+            button
+                .setButtonText('Clear')
+                .setTooltip('Remove the API key from this device and any plain-text copy')
+                .onClick(async () => {
+                    await this.plugin.clearApiKey()
+                    describe()
+                })
+        })
+    }
+
+    /** "Remove plain-text copy now" (legacy `apiKey` still in data.json). */
+    private renderLegacyCopySetting(setting: Setting): void {
+        const refresh = (): void => {
+            setting.setDesc(
+                this.plugin.hasLegacyApiKey() ? LEGACY_COPY_PRESENT_DESC : LEGACY_COPY_ABSENT_DESC
+            )
+        }
+        refresh()
+        setting.addButton((button) => {
+            button
+                .setButtonText('Remove now')
+                .setDisabled(!this.plugin.hasLegacyApiKey())
+                .onClick(async () => {
+                    await this.plugin.removeLegacyApiKey()
+                    button.setDisabled(true)
+                    refresh()
+                })
+        })
+    }
+
+    /**
      * Read a control's current value. The image generation configuration is
      * stored as an object but edited as pretty-printed JSON.
      *
@@ -189,8 +256,8 @@ export class SettingsTab extends PluginSettingTab {
     override getControlValue(key: string): unknown {
         const settings = this.plugin.settings
         switch (key) {
-            case 'apiKey':
-                return settings.apiKey
+            case 'apiKeySecretName':
+                return settings.apiKeySecretName
             case 'copyOutputToClipboard':
                 return settings.copyOutputToClipboard
             case 'appendOutputToCurrentNote':
@@ -215,11 +282,8 @@ export class SettingsTab extends PluginSettingTab {
         const { containerEl } = this
         containerEl.empty()
 
-        new Setting(containerEl).setName('Replicate.com API key').addText((text) => {
-            text.setValue(this.plugin.settings.apiKey).onChange(async (value) => {
-                await this.setControlValue('apiKey', value)
-            })
-        })
+        this.renderApiKeySetting(new Setting(containerEl).setName('Replicate.com API key'))
+        this.renderLegacyCopySetting(new Setting(containerEl).setName('Remove plain-text copy now'))
 
         new Setting(containerEl)
             .setName('Copy the generated output to the clipboard')
@@ -312,11 +376,13 @@ export class SettingsTab extends PluginSettingTab {
      * persist it via the plugin.
      */
     override async setControlValue(key: string, value: unknown): Promise<void> {
+        if ('apiKeySecretName' === key) {
+            // Drops a stale legacy copy when the secret now holds a new value
+            await this.plugin.setApiKeySecretName('string' === typeof value ? value : '')
+            return
+        }
         this.plugin.settings = produce(this.plugin.settings, (draft: Draft<PluginSettings>) => {
             switch (key) {
-                case 'apiKey':
-                    draft.apiKey = 'string' === typeof value ? value : ''
-                    break
                 case 'copyOutputToClipboard':
                     draft.copyOutputToClipboard = Boolean(value)
                     break

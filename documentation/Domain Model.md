@@ -9,7 +9,8 @@ File: `src/app/types/plugin-settings.intf.ts`
 ```ts
 interface PluginSettings {
     // General
-    apiKey: string
+    apiKeySecretName: string // name of the SecretStorage secret, never the key
+    legacySecretMigratedAt: string // ISO date, drives the 60-day purge of the legacy plaintext
     copyOutputToClipboard: boolean
     appendOutputToCurrentNote: boolean
 
@@ -43,7 +44,7 @@ Thin wrapper over the options accepted by `replicate.run(model, options)`. The p
 
 ```
 PluginSettings
-  ├─ apiKey                          → passed to getReplicateClient(apiKey)
+  ├─ apiKeySecretName                → app.secretStorage.getSecret(name) at use time → getReplicateClient(apiKey)
   ├─ imageGenerationModel            → first arg of replicate.run
   ├─ imageGenerationConfiguration    ┐
   └─ (user prompt, at call time)     ┴─→ merged into ReplicateRunModelConfiguration.input
@@ -57,5 +58,5 @@ The `Prediction` type comes from the `replicate` package.
 ## Invariants
 
 - `imageGenerationModel` is never persisted empty (see `is-image-generation-model-configured.fn.ts`). If missing, the generation flow aborts with a Notice.
-- `apiKey` is never logged. See BR-002.
+- The API key is never logged, never stored in `PluginSettings`, and new values never reach data.json. See BR-002, BR-008.
 - The user prompt always wins over any `prompt` key already in `imageGenerationConfiguration` — it is spread last in `generate-images.fn.ts`.

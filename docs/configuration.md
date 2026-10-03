@@ -11,9 +11,16 @@ Open **Settings → Community plugins → Replicate** to configure the plugin.
 
 | Setting                       | Type    | Default | Description                                                                                                                     |
 | ----------------------------- | ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Replicate.com API Key         | secret  | (empty) | Your Replicate API token. Required. Create one at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens). |
+| Replicate.com API key         | secret  | (empty) | Your Replicate API token. Required. Create one at [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens). |
+| Remove plain-text copy now    | button  |         | Removes the plain-text API key copy left by older versions. See below.                                                          |
 | Copy output to clipboard      | boolean | off     | Automatically copies the generated output to the clipboard when generation finishes.                                            |
 | Append output to current note | boolean | off     | Appends the generated output to the note that was active when the command was triggered.                                        |
+
+### Where the API key is stored
+
+The key is kept in Obsidian's secret storage on your device, never in your vault: only the secret's name is saved in the plugin settings. Secret storage is per device, so on a new device select or create the secret once. **Clear** removes the key from this device.
+
+Upgrading from an older version needs no action: every synced device copies the old key into its own secret storage on its next start. The old plain-text copy stays in the plugin data meanwhile and is removed after 60 days. Select **Remove plain-text copy now** once all your devices run this version to remove it earlier.
 
 ## Image generation model
 
