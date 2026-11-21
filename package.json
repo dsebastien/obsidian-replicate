@@ -86,7 +86,7 @@
     },
     "dependencies": {
         "immer": "10.0.4",
-        "replicate": "0.32.0",
+        "replicate": "1.4.0",
         "tslib": "2.4.0",
         "zod": "3.23.8"
     },
